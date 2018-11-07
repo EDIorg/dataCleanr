@@ -1,11 +1,11 @@
-context('Get format string for ISO 8601 datetime')
+context('Read ISO 8601 datetime characters')
 
-library(EDIutils)
+library(dataCleanr)
 
 # Load data -------------------------------------------------------------------
 
 data <- read.table(
-  paste0(path.package('EDIutils'), '/tests/test_data/datetimes.csv'),
+  paste0(path.package('dataCleanr'), '/tests/test_data/datetimes.csv'),
   header = T,
   sep = ",",
   as.is = T,
@@ -13,35 +13,14 @@ data <- read.table(
 
 # Test possible formats -------------------------------------------------------
 
-testthat::test_that('Test possible formats.', {
+testthat::test_that('Read possible formats', {
 
-  expect_equal(
-    get_datetime_format(
-      x = '2012-05-01T13:45:23'
-    ),
-    'YYYY-MM-DDThh:mm:ss'
-    )
-
-  expect_equal(
-    get_datetime_format(
-      x = '2012-05-01T13:45'
-    ),
-    'YYYY-MM-DDThh:mm'
-  )
-
-  expect_equal(
-    get_datetime_format(
-      x = '2012-05-01T13'
-    ),
-    'YYYY-MM-DDThh'
-  )
-
-  expect_equal(
-    get_datetime_format(
-      x = '2012-05-01'
-    ),
-    'YYYY-MM-DD'
-  )
+  # expect_equal(
+  #     iso8601_read(
+  #       x = data$iso8601
+  #       ),
+  #     'test'
+  #     )
 
 })
 

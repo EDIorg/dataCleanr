@@ -1,11 +1,11 @@
 context('Get format string for ISO 8601 datetime')
 
-library(EDIutils)
+library(dataCleanr)
 
 # Load data -------------------------------------------------------------------
 
 data <- read.table(
-  paste0(path.package('EDIutils'), '/tests/test_data/datetimes.csv'),
+  paste0(path.package('dataCleanr'), '/tests/test_data/datetimes.csv'),
   header = T,
   sep = ",",
   as.is = T,
@@ -16,32 +16,73 @@ data <- read.table(
 testthat::test_that('Test possible formats.', {
 
   expect_equal(
-    get_datetime_format(
+    iso8601_format(
       x = '2012-05-01T13:45:23'
     ),
     'YYYY-MM-DDThh:mm:ss'
     )
 
   expect_equal(
-    get_datetime_format(
+    iso8601_format(
       x = '2012-05-01T13:45'
     ),
     'YYYY-MM-DDThh:mm'
   )
 
   expect_equal(
-    get_datetime_format(
+    iso8601_format(
       x = '2012-05-01T13'
     ),
     'YYYY-MM-DDThh'
   )
 
   expect_equal(
-    get_datetime_format(
+    iso8601_format(
       x = '2012-05-01'
     ),
     'YYYY-MM-DD'
   )
+  
+  # Add time zones ------------------------------------------------------------
+  
+  expect_equal(
+    iso8601_format(
+      x = '2012-05-01T13:45:23+05'
+    ),
+    'YYYY-MM-DDThh:mm:ss+hh'
+  )
+  
+  expect_equal(
+    iso8601_format(
+      x = '2012-05-01T13:45:23-05'
+    ),
+    'YYYY-MM-DDThh:mm:ss-hh'
+  )
 
 })
 
+
+testthat::test_that('Assume all timezone offsets are identical', {
+  
+  expect_equal(
+    iso8601_format(
+      x = c(
+        '2012-05-01T13:45:23-05',
+        NA_character_,
+        '2012-05-01T13:45:23+05'
+      )
+    ),
+    'YYYY-MM-DDThh:mm:ss-hh'
+  )
+  
+  expect_equal(
+    iso8601_format(
+      x = c(
+        '2012-05-01T13:45:23+05',
+        '2012-05-01T13:45:23-05'
+      )
+    ),
+    'YYYY-MM-DDThh:mm:ss+hh'
+  )
+  
+})

@@ -28,14 +28,45 @@ iso8601_read <- function(x){
   if (missing(x)){
     stop('Input argument "x" is missing!')
   }
-
+  x <- x[!is.na(x)]
+  
+  # Separate timezones if present ---------------------------------------------
+  
+  if (sum(stringr::str_detect(x, 'T')) > 0){
+    x_sample <- x[stringr::str_detect(x, 'T')]
+    x_sample <- stringr::str_remove_all(x_sample[1], pattern = '.+[T]')
+    if ((sum(stringr::str_detect(x_sample, '\\+')) > 0)){
+      tz <- stringr::str_extract(x_sample, pattern = '[\\+].+')
+      x <- substr(x, start = 1, stop = (nchar(x)-3))
+    } else if ((sum(stringr::str_detect(x_sample, '\\-')) > 0)){
+      tz <- stringr::str_extract(x_sample, pattern = '[\\-].+')
+      x <- substr(x, start = 1, stop = (nchar(x)-3))
+    } else {
+      tz <- NULL
+    }
+  } else {
+    tz <- NULL
+  }
+  
+  # Get timezone name ---------------------------------------------------------
+  
+  
+  
   # Parse datetime strings ----------------------------------------------------
 
-  x_converted <- lubridate::parse_date_time(
-    x = x,
-    orders = 'ymd_HMS',
-    truncated = 3
-  )
+  if (!is.null(tz)){
+    x_converted <- lubridate::parse_date_time(
+      x = x,
+      orders = 'ymd_HMS',
+      truncated = 3
+    )
+  } else {
+    x_converted <- lubridate::parse_date_time(
+      x = x,
+      orders = 'ymd_HMS',
+      truncated = 3
+    )
+  }
 
   # Output --------------------------------------------------------------------
 

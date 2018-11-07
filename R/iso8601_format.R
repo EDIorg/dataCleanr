@@ -26,6 +26,20 @@ iso8601_format <- function(x){
   if (sum(is.na(x)) == length(x)){
     stop('Input argument "x" cannot be entirely NA.')
   }
+  x <- x[!is.na(x)]
+  if (sum(stringr::str_detect(x, 'T')) > 0){
+    x_sample <- x[stringr::str_detect(x, 'T')]
+    x_sample <- stringr::str_remove_all(x_sample[1], pattern = '.+[T]')
+    if ((sum(stringr::str_detect(x_sample, '\\+')) > 0)){
+      tz_sign <- '+'
+    } else if ((sum(stringr::str_detect(x_sample, '\\-')) > 0)){
+      tz_sign <- '-'
+    } else {
+      tz_sign <- NULL
+    }
+  } else {
+    tz_sign <- NULL
+  }
 
   # Remove NA -----------------------------------------------------------------
 
@@ -57,6 +71,16 @@ iso8601_format <- function(x){
     output <- 'YYYY-MM-DD'
   }
 
+  # Add timezone offset -------------------------------------------------------
+  
+  if (!is.null(tz_sign)){
+    output <- paste0(
+      output,
+      tz_sign,
+      'hh'
+    )
+  }
+  
   # Output --------------------------------------------------------------------
 
   output

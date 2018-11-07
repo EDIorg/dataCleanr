@@ -4,7 +4,7 @@
 \alias{iso8601_char}
 \title{Convert datetime string to ISO 8601 standard}
 \usage{
-iso8601_char(x, orders = NULL)
+iso8601_char(x, orders = NULL, tz = NULL)
 }
 \arguments{
 \item{x}{(character) A vector of dates and times.}
@@ -33,6 +33,8 @@ Where:
     \item{M} is minute
     \item{s} is second
 }}
+
+\item{tx}{(character) Time zone offset with respect to UTC (e.g. '+5', '-11')}
 }
 \value{
 A vector of dates and times in the ISO 8601 standard to the precision of

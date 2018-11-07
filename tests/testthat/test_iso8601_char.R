@@ -1,11 +1,11 @@
-context('Standardize dates and times to ISO 8601.')
+context('Convert characters to ISO 8601.')
 
-library(EDIutils)
+library(dataCleanr)
 
 # Load data -------------------------------------------------------------------
 
 data <- read.table(
-  paste0(path.package('EDIutils'), '/tests/test_data/datetimes.csv'),
+  paste0(path.package('dataCleanr'), '/tests/test_data/datetimes.csv'),
   header = T,
   sep = ",",
   as.is = T,
@@ -15,7 +15,7 @@ data <- read.table(
 
 testthat::test_that('orders = NULL results in NULL', {
 
-  output <- datetime_to_iso8601(
+  output <- iso8601_char(
     x = data$raw
     )
 
@@ -31,7 +31,7 @@ testthat::test_that('orders = NULL results in NULL', {
 testthat::test_that('Inadequately defined orders result in warnings.', {
 
   expect_warning(
-    datetime_to_iso8601(
+    iso8601_char(
       x = data$raw,
       orders = c('ymd_HMS')
       )
@@ -44,7 +44,7 @@ testthat::test_that('Inadequately defined orders result in warnings.', {
 testthat::test_that('Use of orders mdy and dmy are unsupported.', {
 
   expect_warning(
-    datetime_to_iso8601(
+    iso8601_char(
       x = data$raw,
       orders = c('mdy', 'dmy')
     )
@@ -60,7 +60,7 @@ testthat::test_that('Resolution of output should match input.', {
   # Remove these data
 
   x_converted <- suppressWarnings(
-    datetime_to_iso8601(
+    iso8601_char(
       x = data$raw,
       orders = c('ymd', 'ymd_h', 'ymd_hm', 'ymd_hms',
                  'mdy', 'mdy_h', 'mdy_hm', 'mdy_hms',
@@ -75,6 +75,39 @@ testthat::test_that('Resolution of output should match input.', {
     data$iso8601[use_i]
   )
 
+})
+
+# Use of "tz" appends timezones to the output ---------------------------------
+
+testthat::test_that('Time zone offset should be present and formatted correctly', {
+  
+  expect_equal(
+    iso8601_char(
+      x = '2012-05-01 13:34:57', 
+      orders = 'ymd_HMS', 
+      tz = '-5'
+      ),
+    '2012-05-01T13:34:57-05'
+  )
+  
+  expect_equal(
+    iso8601_char(
+      x = '2012-05-01 13:34', 
+      orders = 'ymd_HM', 
+      tz = '-5'
+    ),
+    '2012-05-01T13:34-05'
+  )
+  
+  expect_equal(
+    iso8601_char(
+      x = '2012-05-01 13', 
+      orders = 'ymd_H', 
+      tz = '+5'
+    ),
+    '2012-05-01T13+05'
+  )
+  
 })
 
 

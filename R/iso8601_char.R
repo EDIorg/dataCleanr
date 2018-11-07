@@ -4,7 +4,7 @@
 #'     Convert a vector of dates and times to the standard ISO 8601 format
 #'     YYYY-MM-DDThh:mm:ss. NOTE: Time zones are not yet supported.
 #'
-#' @usage iso8601_char(x, orders = NULL)
+#' @usage iso8601_char(x, orders = NULL, tz = NULL)
 #'
 #' @param x
 #'     (character) A vector of dates and times.
@@ -33,6 +33,8 @@
 #'         \item{M} is minute
 #'         \item{s} is second
 #'     }
+#' @param tx
+#'     (character) Time zone offset with respect to UTC (e.g. '+5', '-11')
 #'
 #' @return
 #'     A vector of dates and times in the ISO 8601 standard to the precision of
@@ -41,7 +43,7 @@
 #' @export
 #'
 
-iso8601_char <- function(x, orders = NULL){
+iso8601_char <- function(x, orders = NULL, tz = NULL){
 
   # Check arguments -----------------------------------------------------------
 
@@ -59,9 +61,15 @@ iso8601_char <- function(x, orders = NULL){
       warning('There is a known issue in the ability of this function to parse orders "mdy" and "dmy" when used in the same vector of dates. Please revise your data to contain only one or the other formats, then select which order matches with your data.')
     }
   }
-
-
-
+  if (!is.null(tz)){
+    if (!is.character(tz)){
+      stop('Input argument "tz" is not of class "character"!')
+    }
+    if (!isTRUE(stringr::str_detect(tz, '\\+')) & !isTRUE(stringr::str_detect(tz, '\\-'))){
+      stop('Missing "+" or "-" from input argument "tz".')
+    }
+  }
+  
   # If orders are defined -----------------------------------------------------
 
   if (!is.null(orders)){
@@ -225,6 +233,28 @@ iso8601_char <- function(x, orders = NULL){
         )
       )
 
+    }
+    
+    # Add timezone offset -----------------------------------------------------
+    
+    if (!is.null(tz)){
+      hr <- sprintf('%02d', abs(as.numeric(tz)))
+      if ((as.numeric(tz) > 0)){
+        use_i <- is.na(x_converted)
+        x_converted <- paste0(
+          x_converted, 
+          paste0('+', hr)
+          )
+        x_converted[use_i] <- NA_character_
+      } else if ((as.numeric(tz) < 0)){
+        use_i <- is.na(x_converted)
+        x_converted <- paste0(
+          x_converted, 
+          paste0('-', hr)
+        )
+        x_converted[use_i] <- NA_character_
+      }
+      
     }
 
   }
