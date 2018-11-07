@@ -1,0 +1,14 @@
+Package: dataCleanr
+Title: Functions for cleaning data
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Colin",
+           family = "Smith",
+           role = c("aut", "cre"),
+           email = "colin.smith@wisc.edu")
+Description: Functions for general data cleaning tasks
+License: MIT
+Encoding: UTF-8
+LazyData: true
+Suggests: 
+    testthat
