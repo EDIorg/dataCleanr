@@ -50,15 +50,23 @@ iso8601_read <- function(x){
   
   # Get timezone name ---------------------------------------------------------
   
+  onames <- read.table(
+    paste0(path.package('dataCleanr'), '/inst/time_zones.txt'), 
+    sep = '\t', 
+    header = TRUE, 
+    as.is = TRUE
+    )
   
-  
+  tz_name <- onames$name[onames$offset == as.numeric(tz)] # make character
+
   # Parse datetime strings ----------------------------------------------------
 
   if (!is.null(tz)){
     x_converted <- lubridate::parse_date_time(
       x = x,
       orders = 'ymd_HMS',
-      truncated = 3
+      truncated = 3, 
+      tz = tz_name
     )
   } else {
     x_converted <- lubridate::parse_date_time(
