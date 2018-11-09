@@ -5,7 +5,7 @@ library(dataCleanr)
 # Load data -------------------------------------------------------------------
 
 data <- read.table(
-  paste0(path.package('dataCleanr'), '/tests/test_data/datetimes.csv'),
+  system.file('datetimes.csv', package = 'dataCleanr'),
   header = T,
   sep = ",",
   as.is = T,
