@@ -51,7 +51,7 @@ iso8601_read <- function(x){
   # Get timezone name ---------------------------------------------------------
   
   onames <- read.table(
-    paste0(path.package('dataCleanr'), '/inst/time_zones.txt'), 
+    system.file('time_zones.txt', package = 'dataCleanr'),
     sep = '\t', 
     header = TRUE, 
     as.is = TRUE
