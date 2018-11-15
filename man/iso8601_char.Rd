@@ -34,7 +34,7 @@ Where:
     \item{s} is second
 }}
 
-\item{tx}{(character) Time zone offset with respect to UTC (e.g. '+5', '-11')}
+\item{tz}{(character) Time zone offset with respect to UTC (e.g. '+5', '-11')}
 }
 \value{
 A vector of dates and times in the ISO 8601 standard to the precision of

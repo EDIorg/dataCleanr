@@ -33,7 +33,7 @@
 #'         \item{M} is minute
 #'         \item{s} is second
 #'     }
-#' @param tx
+#' @param tz
 #'     (character) Time zone offset with respect to UTC (e.g. '+5', '-11')
 #'
 #' @return

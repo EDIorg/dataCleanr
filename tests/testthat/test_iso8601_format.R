@@ -4,7 +4,7 @@ library(dataCleanr)
 
 # Load data -------------------------------------------------------------------
 
-data <- read.table(
+data <- utils::read.table(
   system.file('datetimes.csv', package = 'dataCleanr'),
   header = T,
   sep = ",",
