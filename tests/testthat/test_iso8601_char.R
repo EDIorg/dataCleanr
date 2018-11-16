@@ -110,5 +110,87 @@ testthat::test_that('Time zone offset should be present and formatted correctly'
   
 })
 
+# date HMS --------------------------------------------------------------------
+
+testthat::test_that('date HMS', {
+  
+  # ymd_HMS
+  use_i <- data$orders == 'ymd_HMS'
+  x_standard <- rep(
+    NA, 
+    length(use_i)
+  )
+  x_standard[use_i] <- data$iso8601[use_i]
+  x_converted <- suppressWarnings(
+    iso8601_char(
+      x = data$raw,
+      orders = 'ymd_HMS'
+    )
+  )
+  expect_equal(
+    x_standard, 
+    x_converted
+  )
+  
+  # *_HMS does not parse datetimes with lower time resolution
+  use_i <- data$orders %in% c('ymd_HMS', 'mdy_HMS', 'dmy_HMS')
+  x_standard <- rep(
+    NA, 
+    length(use_i)
+  )
+  x_standard[use_i] <- data$iso8601[use_i]
+  x_converted <- suppressWarnings(
+    iso8601_char(
+      x = data$raw,
+      orders = c('ymd_HMS', 'mdy_HMS', 'dmy_HMS')
+    )
+  )
+  expect_equal(
+    is.na(x_converted), 
+    is.na(x_standard)
+  )
+  
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

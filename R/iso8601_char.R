@@ -192,32 +192,48 @@ iso8601_char <- function(x, orders = NULL, tz = NULL){
     # Format = ymd_HMS
 
     if ('ymd_hms' %in% orders){
+      
       output <- suppressWarnings(lubridate::parse_date_time(
         x = x,
         orders = 'ymd_HMS'
       ))
+      use_i <- stringr::str_detect(
+        string = x,
+        pattern = ':[:digit:]+:|\\s[:digit:]{6}'
+      )
+      output[!use_i] <- NA
       x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
       x[!is.na(output)] <- NA
     }
 
     # Format = mdy_HMS
 
-    if ('mdy_hm' %in% orders){
+    if ('mdy_hms' %in% orders){
       output <- suppressWarnings(lubridate::parse_date_time(
         x = x,
         orders = 'mdy_HMS'
       ))
+      use_i <- stringr::str_detect(
+        string = x,
+        pattern = ':[:digit:]+:|\\s[:digit:]{6}'
+      )
+      output[!use_i] <- NA
       x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
       x[!is.na(output)] <- NA
     }
 
     # Format = dmy_HMS
 
-    if ('dmy_hm' %in% orders){
+    if ('dmy_hms' %in% orders){
       output <- suppressWarnings(lubridate::parse_date_time(
         x = x,
         orders = 'dmy_HMS'
       ))
+      use_i <- stringr::str_detect(
+        string = x,
+        pattern = ':[:digit:]+:|\\s[:digit:]{6}'
+      )
+      output[!use_i] <- NA
       x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
       x[!is.na(output)] <- NA
     }
