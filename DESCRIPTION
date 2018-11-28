@@ -17,4 +17,4 @@ Suggests:
     testthat
 RoxygenNote: 6.1.0
 Remotes:
-    EDIorg/EDI-utilities/EDIutils
+    EDIorg/EDIutils
