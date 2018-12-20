@@ -13,6 +13,15 @@
 #'     (character) A datetime format string if only one is found, otherwise
 #'     a vector of datetime format strings are returned.
 #'
+#' @examples 
+#' # Get format string
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
+#' iso8601_format(datetime)
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
+#' iso8601_format(datetime)
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '+5')
+#' iso8601_format(datetime)
+#'
 #' @export
 #'
 
