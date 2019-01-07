@@ -43,6 +43,13 @@ testthat::test_that('Test possible formats.', {
     'YYYY-MM-DD'
   )
   
+  expect_equal(
+    iso8601_format(
+      x = '2012'
+    ),
+    'YYYY'
+  )
+  
   # Add time zones ------------------------------------------------------------
   
   expect_equal(
