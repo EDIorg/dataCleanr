@@ -51,7 +51,8 @@ iso8601_char <- function(x, orders = NULL, tz = NULL){
     stop('Input argument "x" is missing!')
   }
   if (!is.character(x)){
-    stop('Input argument "x" is not of class "character"!')
+    warning('Input argument "x" is not of class "character"! Coercing to character.')
+    x <- as.character(x)
   }
   if (!is.null(orders)){
     if (!is.character(orders)){
