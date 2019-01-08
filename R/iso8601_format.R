@@ -13,6 +13,15 @@
 #'     (character) A datetime format string if only one is found, otherwise
 #'     a vector of datetime format strings are returned.
 #'
+#' @examples 
+#' # Get format string
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
+#' iso8601_format(datetime)
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
+#' iso8601_format(datetime)
+#' datetime <- iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '+5')
+#' iso8601_format(datetime)
+#'
 #' @export
 #'
 
@@ -49,6 +58,7 @@ iso8601_format <- function(x){
 
   use_i <- stringr::str_count(x, pattern = ":")
   use_i_t <- stringr::str_count(x, pattern = "T")
+  use_i_d <- stringr::str_count(x, pattern = "-")
 
   Mode <- function(x) {
     ux <- unique(x)
@@ -67,8 +77,11 @@ iso8601_format <- function(x){
   if ((use_i == 0) & ((use_i_t == 1))){
     output <- 'YYYY-MM-DDThh'
   }
-  if ((use_i == 0) & ((use_i_t != 1))){
+  if ((use_i == 0) & ((use_i_t != 1)) & ((use_i_d != 0))){
     output <- 'YYYY-MM-DD'
+  }
+  if ((use_i == 0) & ((use_i_t != 1)) & ((use_i_d == 0))){
+    output <- 'YYYY'
   }
 
   # Add timezone offset -------------------------------------------------------
