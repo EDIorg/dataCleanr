@@ -9,6 +9,7 @@ iso8601_read(x)
 \arguments{
 \item{x}{(character) A vector of dates and times in the ISO8601 format:
 \itemize{
+    \item{YYYY}
     \item{YYYY-MM-DD}
     \item{YYYY-MM-DDThh}
     \item{YYYY-MM-DDThh:mm}
@@ -16,7 +17,8 @@ iso8601_read(x)
 }}
 }
 \value{
-A vector of datetime object (POSIXct, POSIXt).
+A vector of datetime object (POSIXct, POSIXt), if format is not
+    YYYY. If YYYY, then integers are returned.
 }
 \description{
 Convert a character string in the ISO 8601 format to a datetime object

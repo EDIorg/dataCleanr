@@ -44,6 +44,56 @@ testthat::test_that('Read possible formats', {
     ),
     as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-5')
   )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01T13:45:23',
+        NA_character_
+      )
+    ),
+    as.POSIXct('2012-05-01 13:45:23', tz = 'UTC')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01T13:45',
+        NA_character_
+      )
+    ),
+    as.POSIXct('2012-05-01 13:45:00', tz = 'UTC')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01T13',
+        NA_character_
+      )
+    ),
+    as.POSIXct('2012-05-01 13:00:00', tz = 'UTC')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01',
+        NA_character_
+      )
+    ),
+    as.POSIXct('2012-05-01', tz = 'UTC')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012',
+        NA_character_
+      )
+    ),
+    as.integer('2012')
+  )
 
 })
 

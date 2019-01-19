@@ -9,6 +9,7 @@
 #' @param x
 #'     (character) A vector of dates and times in the ISO8601 format:
 #'     \itemize{
+#'         \item{YYYY}
 #'         \item{YYYY-MM-DD}
 #'         \item{YYYY-MM-DDThh}
 #'         \item{YYYY-MM-DDThh:mm}
@@ -16,7 +17,8 @@
 #'     }
 #'
 #' @return
-#'     A vector of datetime object (POSIXct, POSIXt).
+#'     A vector of datetime object (POSIXct, POSIXt), if format is not
+#'     YYYY. If YYYY, then integers are returned.
 #'
 #' @examples 
 #' # Read data strings created with iso8601_char
@@ -76,11 +78,44 @@ iso8601_read <- function(x){
       tz = tz_name
     )
   } else {
-    x_converted <- lubridate::parse_date_time(
-      x = x,
-      orders = 'ymd_HMS',
-      truncated = 3
-    )
+    
+    format_str <- iso8601_format(x)
+    
+    if (format_str == 'YYYY-MM-DDThh:mm:ss'){
+      
+      x_converted <- lubridate::parse_date_time(
+        x = x,
+        orders = 'ymd_HMS'
+      )
+      
+    } else if (format_str == 'YYYY-MM-DDThh:mm'){
+      
+      x_converted <- lubridate::parse_date_time(
+        x = x,
+        orders = 'ymd_HM'
+      )
+      
+    } else if (format_str == 'YYYY-MM-DDThh'){
+      
+      x_converted <- lubridate::parse_date_time(
+        x = x,
+        orders = 'ymd_H'
+      )
+      
+    } else if (format_str == 'YYYY-MM-DD'){
+      
+      x_converted <- lubridate::parse_date_time(
+        x = x,
+        orders = 'ymd'
+      )
+      
+    } else if (format_str == 'YYYY'){
+      
+      x_converted <- as.integer(x)
+      
+    }
+    
+    
   }
 
   # Output --------------------------------------------------------------------
