@@ -67,6 +67,7 @@ iso8601_format <- function(x){
 
   use_i <- Mode(use_i)
   use_i_t <- Mode(use_i_t)
+  use_i_d <- Mode(use_i_d)
 
   if (use_i == 2){
     output <- 'YYYY-MM-DDThh:mm:ss'
