@@ -7,7 +7,7 @@
 #'
 #' @param x
 #'     (character) A vector of dates and times created with
-#'     `EDIutils::iso8601_char`.
+#'     `iso8601_char`.
 #'
 #' @return
 #'     (character) A datetime format string if only one is found, otherwise

@@ -8,7 +8,7 @@ iso8601_format(x)
 }
 \arguments{
 \item{x}{(character) A vector of dates and times created with
-`EDIutils::iso8601_char`.}
+`iso8601_char`.}
 }
 \value{
 (character) A datetime format string if only one is found, otherwise
