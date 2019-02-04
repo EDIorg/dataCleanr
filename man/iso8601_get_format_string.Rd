@@ -20,10 +20,10 @@ Get format of ISO 8601 formatted character string.
 \examples{
 # Get format string
 datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
-iso8601_format(datetime)
+iso8601_get_format_string(datetime)
 datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
-iso8601_format(datetime)
+iso8601_get_format_string(datetime)
 datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '+5')
-iso8601_format(datetime)
+iso8601_get_format_string(datetime)
 
 }
