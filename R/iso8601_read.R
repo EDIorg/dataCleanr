@@ -7,18 +7,12 @@
 #' @usage iso8601_read(x)
 #'
 #' @param x
-#'     (character) A vector of dates and times in the ISO8601 format:
-#'     \itemize{
-#'         \item{YYYY}
-#'         \item{YYYY-MM-DD}
-#'         \item{YYYY-MM-DDThh}
-#'         \item{YYYY-MM-DDThh:mm}
-#'         \item{YYYY-MM-DDThh:mm:ss}
-#'     }
+#'     (character) A vector of dates and times created with 
+#'     `dataCleanr::iso8601_convert`.
 #'
 #' @return
-#'     A vector of datetime object (POSIXct, POSIXt), if format is not
-#'     YYYY. If YYYY, then integers are returned.
+#'     A vector of datetime object (POSIXct, POSIXt). If format is YYYY, then 
+#'     integers are returned.
 #'
 #' @examples 
 #' # Read data strings created with iso8601_char
@@ -79,7 +73,7 @@ iso8601_read <- function(x){
     )
   } else {
     
-    format_str <- iso8601_format(x)
+    format_str <- iso8601_get_format_string(x)
     
     if (format_str == 'YYYY-MM-DDThh:mm:ss'){
       
