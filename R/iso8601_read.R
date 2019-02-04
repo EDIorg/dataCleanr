@@ -15,8 +15,8 @@
 #'     integers are returned.
 #'
 #' @examples 
-#' # Read data strings created with iso8601_char
-#' datetimes <- iso8601_char(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
+#' # Read data strings created with iso8601_convert
+#' datetimes <- iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
 #' datetimes <- iso8601_read(datetimes)
 #' class(datetimes)
 #'  

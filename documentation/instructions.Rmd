@@ -9,7 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ### Overview
 
-Create ISO 8601 character strings with `iso8601_char`. Read ISO 8601 character strings with `iso8601_read`. Detect ISO 8601 format strings with `iso8601_format`. These functions support valid ISO8601 datetime resolutions and time zones.
+Create ISO 8601 character strings with `iso8601_convert`. Read ISO 8601 character strings with `iso8601_read`. Detect ISO 8601 format strings with `iso8601_get_format_string`. These functions support valid ISO8601 datetime resolutions and time zones.
 
 - [Install and load libraries](#install-and-load-libraries)
 - [Load test data](#load-test-data)

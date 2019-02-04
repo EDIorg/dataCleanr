@@ -78,16 +78,16 @@
 #'
 #' @examples 
 #'    # Convert common date times
-#'    iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
-#'    iso8601_char(x = '05/01/2012 13:29', orders = 'mdy_HM')
-#'    iso8601_char(x = '20120501 13', orders = 'ymd_H')
+#'    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
+#'    iso8601_convert(x = '05/01/2012 13:29', orders = 'mdy_HM')
+#'    iso8601_convert(x = '20120501 13', orders = 'ymd_H')
 #' 
 #'    # Convert common date times and include time zone offset
-#'    iso8601_char(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
-#'    iso8601_char(x = '2012-05-01 13', orders = 'ymd_H', tz = '+5')
+#'    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
+#'    iso8601_convert(x = '2012-05-01 13', orders = 'ymd_H', tz = '+5')
 #' 
 #'    # Variance in input format is supported as long as orders are defined
-#'    iso8601_char(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
+#'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
 #'
 #' @export
 #'
