@@ -17,7 +17,9 @@ iso8601_convert(x, orders, tz = NULL, truncated = 0,
  arbitrary separators. These are discarded. See details for implemented 
  formats. \emph{The above definition was copied directly from lubridate
  1.7.4.90000 documentation.}.
-\itemize{The list below contains recognized formats.
+ 
+ The list below contains recognized formats.
+\itemize{
      \item{y} Year without centry (00--99 or 0--99). Also matches with
      centry format (Y).
      \item{Y} Year with century.
