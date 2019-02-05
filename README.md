@@ -3,27 +3,16 @@
 
 # dataCleanr
 
-The `dataCleanr` cleans data.
+`dataCleanr` is designed to make it easy for you to prepare your data for archive and simplify reuse.
 
-## Getting started
-
-### R package
-
-Install `dataCleanr` from GitHub
-
+## Installation
 ```
-# Install and load devtools
-install.packages("devtools")
-library(devtools)
-
-# Install and load dataCleanr
-install_github("EDIorg/dataCleanr")
-library(dataCleanr)
+# Install from GitHub
+devtools::install_github("EDIorg/dataCleanr")
 ```
 
-### Documenation
-
-Each function is well documented. Check em out!
+## Usage
+Check out available functions and use cases at https://EDIorg.github.io/dataCleanr/
 
 ## Contributing
 
@@ -31,7 +20,7 @@ We welcome contributions of all forms including bug reports, requests for develo
 
 ## Testing
 
-Unit tests are found under /tests and follow the `testthat` methodology.
+Unit tests are implemented with `testthat`.
 
 ## Versioning
 

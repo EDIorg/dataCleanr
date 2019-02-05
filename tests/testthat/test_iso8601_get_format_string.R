@@ -16,35 +16,35 @@ data <- utils::read.table(
 testthat::test_that('Test possible formats.', {
 
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01T13:45:23'
     ),
     'YYYY-MM-DDThh:mm:ss'
     )
 
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01T13:45'
     ),
     'YYYY-MM-DDThh:mm'
   )
 
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01T13'
     ),
     'YYYY-MM-DDThh'
   )
 
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01'
     ),
     'YYYY-MM-DD'
   )
   
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012'
     ),
     'YYYY'
@@ -53,14 +53,14 @@ testthat::test_that('Test possible formats.', {
   # Add time zones ------------------------------------------------------------
   
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01T13:45:23+05'
     ),
     'YYYY-MM-DDThh:mm:ss+hh'
   )
   
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = '2012-05-01T13:45:23-05'
     ),
     'YYYY-MM-DDThh:mm:ss-hh'
@@ -72,7 +72,7 @@ testthat::test_that('Test possible formats.', {
 testthat::test_that('Assume all timezone offsets are identical', {
   
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23-05',
         NA_character_,
@@ -83,7 +83,7 @@ testthat::test_that('Assume all timezone offsets are identical', {
   )
   
   expect_equal(
-    iso8601_format(
+    iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23+05',
         '2012-05-01T13:45:23-05'

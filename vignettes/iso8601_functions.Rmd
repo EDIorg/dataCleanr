@@ -1,0 +1,116 @@
+---
+title: "Using the iso8601 functions"
+author: "Colin Smith"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Data interoperability is improved with the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, the Environmental Data Initiative has developed the set of `iso8601_*` functions addressing the common use cases of date time conversion, format string detection, and import to R as POSIXct and POSIXlt. This vignette provides an overview of these functions, their capabilities, and limitations.
+
+```{r instload dataCleanr, message=FALSE, warning=FALSE}
+# Install and load dataCleanr
+# devtools::install_github('clnsmth/dataCleanr')
+library(dataCleanr)
+```
+
+## Conversion
+
+Converting dates represented by a single format is easy.
+
+```{r one format, echo=TRUE, paged.print=TRUE}
+# Example data
+head(data_iso8601$date)
+
+# Convert to ISO 8601
+x <- iso8601_convert(x = data_iso8601$date, orders = 'mdy')
+head(x)
+```
+
+Converting dates represented by two formats only requires adding the second format to the `orders` argument. If only one format is supplied to orders, then a helpful warning message is printed.
+
+```{r two formats, echo=TRUE, paged.print=TRUE}
+# Example data
+data_iso8601$date_2_formats
+
+# Convert with inadequate orders
+iso8601_convert(x = data_iso8601$date_2_formats, orders = 'mdy')
+
+# Convert with fully defined orders
+iso8601_convert(x = data_iso8601$date_2_formats, orders = c('mdy', 'dmy'))
+```
+
+Time zone offsets are supplied as a two digit hour with a '+' or '-' with respect to UTC.
+
+```{r datetimes with offset, echo=TRUE, paged.print=TRUE}
+# Example data
+head(data_iso8601$datetime)
+
+# Convert to ISO 8601
+x <- iso8601_convert(x = data_iso8601$datetime, orders = 'mdy HMS', tz = '-05')
+head(x)
+```
+
+Converting dates represented by several formats is a bit more involved. 
+
+```{r converting many formats, echo=TRUE, paged.print=TRUE}
+# Several date and time formats representing 2012-05-15T13:29:54
+data_iso8601$datetime_mess
+
+# Convert to ISO 8601
+iso8601_convert(x = data_iso8601$datetime_mess, orders = c('ymd', 'mdy', 'dmy HMS'))
+```
+
+## Datetime format string detection
+
+Automated extraction of metadata content from data entities streamlines data archiving tasks. Retrieve the date time format specifier from a vector of ISO 8601 data created with `iso8601_convert` using `iso8601_get_format_string`.
+
+```{r format string, echo=TRUE, paged.print=TRUE}
+# Input data
+data_converted <- iso8601_convert(x = data_iso8601$datetime, orders = 'mdy HMS', tz = '-05')
+head(data_converted)
+
+# Get format string
+iso8601_get_format_string(x = data_converted)
+```
+
+If more than one date time format exists, `iso8601_get_format_string` returns the mode.
+
+```{r format string mode, echo=TRUE, paged.print=TRUE}
+# Input data
+data_converted <- c(
+  '2012-05-15T13:45:00',
+  '2012-06-15T13:45:00',
+  '2012-07-15T13:45:00',
+  '2012-08-15T13:45',
+  '2012-09-15T13:45',
+  '2012-10-15T13'
+)
+
+# Get the most common format
+iso8601_get_format_string(x = data_converted)
+```
+
+## Reading into R
+
+To read ISO 8601 formatted dates and times into R as POSIXct POSIXt, use `iso8601_read`.
+
+```{r read, echo=TRUE, paged.print=TRUE}
+# Input data
+data_converted <- iso8601_convert(x = data_iso8601$datetime, orders = 'mdy HMS', tz = '-05')
+head(data_converted)
+
+# Read data into R
+x <- iso8601_read(x = data_converted)
+head(x)
+class(x)

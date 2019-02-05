@@ -2,32 +2,28 @@
 % Please edit documentation in R/iso8601_read.R
 \name{iso8601_read}
 \alias{iso8601_read}
-\title{Read ISO 8601 standard character string to datetime object (POSIXct, POSIXt)}
+\title{Read ISO 8601 date times into R as POSIXct, POSIXt}
 \usage{
 iso8601_read(x)
 }
 \arguments{
-\item{x}{(character) A vector of dates and times in the ISO8601 format:
-\itemize{
-    \item{YYYY}
-    \item{YYYY-MM-DD}
-    \item{YYYY-MM-DDThh}
-    \item{YYYY-MM-DDThh:mm}
-    \item{YYYY-MM-DDThh:mm:ss}
-}}
+\item{x}{(character) A vector of ISO 8601 date times created with 
+`dataCleanr::iso8601_convert`.}
 }
 \value{
-A vector of datetime object (POSIXct, POSIXt), if format is not
-    YYYY. If YYYY, then integers are returned.
+(POSIXct, POSIXt) representation of date times, unless the format
+    is 'YYYY', in which case integer class data is returned.
 }
 \description{
-Convert a character string in the ISO 8601 format to a datetime object
-    (POSIXct, POSIXt). NOTE: Time zones are not currently supported.
+Read ISO 8601 formatted date times into POSIXct, POSIXt.
 }
 \examples{
-# Read data strings created with iso8601_char
-datetimes <- iso8601_char(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
-datetimes <- iso8601_read(datetimes)
+# Read date time strings
+datetimes <- iso8601_read(c('2012-05-01T13:23:00', '2012-05-02T13:23:00'))
+class(datetimes)
+
+# Read date time strings with specified time zone offset
+datetimes <- iso8601_read(c('2012-05-01T13:23:00-03', '2012-05-02T13:23:00-03'))
 class(datetimes)
  
 
