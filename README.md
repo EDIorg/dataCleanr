@@ -3,7 +3,7 @@
 
 # dataCleanr
 
-`dataCleanr` is designed to make it easy for you to prepare your data for archive and maximized usage.
+`dataCleanr` is designed to make it easy for you to prepare your data for archive and simplify reuse.
 
 ## Installation
 ```
