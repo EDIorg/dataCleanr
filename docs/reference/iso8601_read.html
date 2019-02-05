@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Read ISO 8601 standard character string to datetime object (POSIXct, POSIXt) — iso8601_read • dataCleanr</title>
+<title>Read ISO 8601 date times into R as POSIXct, POSIXt — iso8601_read • dataCleanr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Read ISO 8601 standard character string to datetime object (POSIXct, POSIXt) — iso8601_read" />
+<meta property="og:title" content="Read ISO 8601 date times into R as POSIXct, POSIXt — iso8601_read" />
 
-<meta property="og:description" content="Convert a character string in the ISO 8601 format to a datetime object
-    (POSIXct, POSIXt). NOTE: Time zones are not currently supported." />
+<meta property="og:description" content="Read ISO 8601 formatted date times into POSIXct, POSIXt." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -87,7 +86,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/my-vignette.html">Vignette Title</a>
+      <a href="../articles/my-vignette.html">Using iso8601_* functions</a>
     </li>
   </ul>
 </li>
@@ -107,15 +106,14 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Read ISO 8601 standard character string to datetime object (POSIXct, POSIXt)</h1>
+    <h1>Read ISO 8601 date times into R as POSIXct, POSIXt</h1>
     
     <div class="hidden name"><code>iso8601_read.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Convert a character string in the ISO 8601 format to a datetime object
-    (POSIXct, POSIXt). NOTE: Time zones are not currently supported.</p>
+    <p>Read ISO 8601 formatted date times into POSIXct, POSIXt.</p>
     
     </div>
 
@@ -126,21 +124,24 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>(character) A vector of dates and times created with 
+      <td><p>(character) A vector of ISO 8601 date times created with 
 `dataCleanr::iso8601_convert`.</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A vector of datetime object (POSIXct, POSIXt). If format is YYYY, then 
-    integers are returned.</p>
+    <p>(POSIXct, POSIXt) representation of date times, unless the format
+    is 'YYYY', in which case integer class data is returned.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Read data strings created with iso8601_convert</span>
-<span class='no'>datetimes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='iso8601_convert.html'>iso8601_convert</a></span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HM'</span>, <span class='st'>'dmy_H'</span>))
-<span class='no'>datetimes</span> <span class='kw'>&lt;-</span> <span class='fu'>iso8601_read</span>(<span class='no'>datetimes</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning:  1 failed to parse.</span></div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>datetimes</span>)</div><div class='output co'>#&gt; [1] "POSIXct" "POSIXt" </div><div class='input'> 
+    <pre class="examples"><div class='input'><span class='co'># Read date time strings</span>
+<span class='no'>datetimes</span> <span class='kw'>&lt;-</span> <span class='fu'>iso8601_read</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01T13:23:00'</span>, <span class='st'>'2012-05-02T13:23:00'</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>datetimes</span>)</div><div class='output co'>#&gt; [1] "POSIXct" "POSIXt" </div><div class='input'>
+<span class='co'># Read date time strings with specified time zone offset</span>
+<span class='no'>datetimes</span> <span class='kw'>&lt;-</span> <span class='fu'>iso8601_read</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01T13:23:00-03'</span>, <span class='st'>'2012-05-02T13:23:00-03'</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>datetimes</span>)</div><div class='output co'>#&gt; [1] "POSIXct" "POSIXt" </div><div class='input'> 
 
 </div></pre>
   </div>

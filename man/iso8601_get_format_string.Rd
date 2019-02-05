@@ -2,28 +2,27 @@
 % Please edit documentation in R/iso8601_get_format_string.R
 \name{iso8601_get_format_string}
 \alias{iso8601_get_format_string}
-\title{Get datetime format string from ISO 8601 datetimes}
+\title{Get the format string used in a set of ISO 8601 date times}
 \usage{
 iso8601_get_format_string(x)
 }
 \arguments{
-\item{x}{(character) A vector of dates and times created with
-`iso8601_convert`.}
+\item{x}{(character) A vector ISO 8601 dates and times created with 
+`dataCleanr::iso8601_convert`.}
 }
 \value{
-(character) A datetime format string if only one is found, otherwise
-    a vector of datetime format strings are returned.
+(character) A date time format string representing user supplied ISO 
+    8601 data. If more than one date time format is present, then the mode
+    is returned.
 }
 \description{
-Get format of ISO 8601 formatted character string.
+Get the format string of user supplied ISO 8601 date times (e.g. 
+    'YYYY-MM-DDThh:mm:ss).
 }
 \examples{
-# Get format string
-datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS')
-iso8601_get_format_string(datetime)
-datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
-iso8601_get_format_string(datetime)
-datetime <- iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '+5')
-iso8601_get_format_string(datetime)
+# Get format strings
+iso8601_get_format_string('2012-05-01')
+iso8601_get_format_string('2012-05-01T13')
+iso8601_get_format_string('2012-05-01T13:29:54+05')
 
 }

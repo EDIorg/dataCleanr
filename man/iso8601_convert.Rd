@@ -2,7 +2,7 @@
 % Please edit documentation in R/iso8601_convert.R
 \name{iso8601_convert}
 \alias{iso8601_convert}
-\title{Convert dates and times to the ISO 8601 standard}
+\title{Convert dates and times to ISO 8601}
 \usage{
 iso8601_convert(x, orders, tz = NULL, truncated = 0, 
     exact = FALSE, train = TRUE, drop = FALSE)
@@ -83,12 +83,12 @@ Convert date and time character strings to the standard ISO 8601 format,
    a subset of the associated arguments.
 }
 \examples{
-   # Convert common date times
+   # Convert dates and times of varying formats
    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd HMS')
    iso8601_convert(x = '05/01/2012 13:29', orders = 'mdy HM')
-   iso8601_convert(x = '20120501 13', orders = 'ymd H')
+   iso8601_convert(x = '20120501 13', orders = '\%Y\%m\%d \%H')
 
-   # Convert common date times and include time zone offset
+   # Convert dates and times and include a time zone offset
    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
    iso8601_convert(x = '2012-05-01 13', orders = 'ymd_H', tz = '+5')
 
