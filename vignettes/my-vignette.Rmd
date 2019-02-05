@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Using iso8601* functions"
+author: "Colin Smith"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
