@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Get the format string used in a set of ISO 8601 date times — iso8601_get_format_string • dataCleanr</title>
+<title>Example data for test driving iso8601_* functions — data_iso8601 • dataCleanr</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -30,10 +30,9 @@
 
 
 
-<meta property="og:title" content="Get the format string used in a set of ISO 8601 date times — iso8601_get_format_string" />
+<meta property="og:title" content="Example data for test driving iso8601_* functions — data_iso8601" />
 
-<meta property="og:description" content="Get the format string of user supplied ISO 8601 date times (e.g. 
-    'YYYY-MM-DDThh:mm:ss)." />
+<meta property="og:description" content="A dataset containing dates and times of different formats." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -107,51 +106,36 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Get the format string used in a set of ISO 8601 date times</h1>
+    <h1>Example data for test driving iso8601_* functions</h1>
     
-    <div class="hidden name"><code>iso8601_get_format_string.Rd</code></div>
+    <div class="hidden name"><code>data_iso8601.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Get the format string of user supplied ISO 8601 date times (e.g. 
-    'YYYY-MM-DDThh:mm:ss).</p>
+    <p>A dataset containing dates and times of different formats.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>iso8601_get_format_string</span>(<span class='no'>x</span>)</pre>
-    
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>x</th>
-      <td><p>(character) A vector ISO 8601 dates and times created with 
-`dataCleanr::iso8601_convert`.</p></td>
-    </tr>
-    </table>
-    
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+    <pre class="usage"><span class='no'>data_iso8601</span></pre>
+        
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>(character) A date time format string representing user supplied ISO 
-    8601 data. If more than one date time format is present, then the mode
-    is returned.</p>
+    <p>A data frame with 31 rows and 4 columns:</p><dl class='dl-horizontal'>
+  <dt>date</dt><dd><p>Time series incrementing by day</p></dd>
+  <dt>date_2_formats</dt><dd><p>Time series incrementing by day in two formats</p></dd>
+  <dt>datetime</dt><dd><p>Dates and times incrementing by hour</p></dd>
+  <dt>datetime_mess</dt><dd><p>Single date and time represented in many formats</p></dd>
+</dl>
     
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Get format strings</span>
-<span class='fu'>iso8601_get_format_string</span>(<span class='st'>'2012-05-01'</span>)</div><div class='output co'>#&gt; [1] "YYYY-MM-DD"</div><div class='input'><span class='fu'>iso8601_get_format_string</span>(<span class='st'>'2012-05-01T13'</span>)</div><div class='output co'>#&gt; [1] "YYYY-MM-DDThh"</div><div class='input'><span class='fu'>iso8601_get_format_string</span>(<span class='st'>'2012-05-01T13:29:54+05'</span>)</div><div class='output co'>#&gt; [1] "YYYY-MM-DDThh:mm:ss+hh"</div><div class='input'>
-</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
+      <li><a href="#format">Format</a></li>
+          </ul>
 
   </div>
 </div>
