@@ -17,6 +17,11 @@ iso8601_read(x)
 \description{
 Read ISO 8601 formatted dates and times into POSIXct, POSIXt.
 }
+\details{
+`iso8601_read` provides a lightweight option for reading ISO 8601 data 
+    "as is" in the POSIXct POXIXt class. Use `lubridate::parse_date_time` 
+    for more options on handling time zone offsets and locales.
+}
 \examples{
 # Read date time strings
 datetimes <- iso8601_read(c('2012-05-01T13:23:00', '2012-05-02T13:23:00'))
