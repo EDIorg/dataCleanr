@@ -1,8 +1,13 @@
-#' Get the format string used in a set of ISO 8601 date times
+#' Get the format string specifier of ISO 8601 strings
 #'
 #' @description
-#'     Get the format string of user supplied ISO 8601 date times (e.g. 
-#'     'YYYY-MM-DDThh:mm:ss).
+#'     Get the format string specifier (e.g. 'YYYY-MM-DD') from a set of ISO 
+#'     8601 dates and times in the format output by `iso8601_convert`.
+#'     
+#' @details
+#'     `iso8601_get_format_string` uses regular expressions to parse input data 
+#'     and identify the format string(s) present in a set of ISO 8601 dates and 
+#'     times in the format output by `iso8601_convert`.
 #'
 #' @usage iso8601_get_format_string(x)
 #'
@@ -13,14 +18,16 @@
 #' @return
 #'     (character) A date time format string representing user supplied ISO 
 #'     8601 data. If more than one date time format is present, then the mode
-#'     is returned.
+#'     is returned along with a warning message.
 #'
 #' @examples 
 #' # Get format strings
 #' iso8601_get_format_string('2012-05-01')
 #' iso8601_get_format_string('2012-05-01T13')
 #' iso8601_get_format_string('2012-05-01T13:29:54+05')
-#'
+#' 
+#' # Expect a warning when more than one format is present.
+#' iso8601_get_format_string(c('2012-05-01', '2012-05-02', '2012-05-03 13:45:30'))
 #' @export
 #'
 
@@ -59,6 +66,10 @@ iso8601_get_format_string <- function(x){
   use_i_t <- stringr::str_count(x, pattern = "T")
   use_i_d <- stringr::str_count(x, pattern = "-")
 
+  if ((length(unique(use_i)) > 1) | (length(unique(use_i_t)) > 1) | (length(unique(use_i_d)) > 1)){
+    warning('More than one date and time format was found. The returned value is the mode of the detected formats.')
+  }
+  
   Mode <- function(x) {
     ux <- unique(x)
     ux[which.max(tabulate(match(x, ux)))]

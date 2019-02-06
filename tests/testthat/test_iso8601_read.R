@@ -22,7 +22,7 @@ testthat::test_that('Read possible formats', {
         NA_character_
       )
     ),
-    as.POSIXct('2012-05-01 13:45:23', tz = 'GMT')
+    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-0')
   )
   
   expect_equal(
@@ -32,7 +32,7 @@ testthat::test_that('Read possible formats', {
         NA_character_
         )
       ),
-    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT+5')
+    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-5')
   )
   
   expect_equal(
@@ -42,7 +42,7 @@ testthat::test_that('Read possible formats', {
         NA_character_
       )
     ),
-    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-5')
+    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT+5')
   )
   
   expect_equal(

@@ -2,7 +2,7 @@
 % Please edit documentation in R/iso8601_read.R
 \name{iso8601_read}
 \alias{iso8601_read}
-\title{Read ISO 8601 date times into R as POSIXct, POSIXt}
+\title{Read ISO 8601 formatted strings into POSIXct, POSIXt}
 \usage{
 iso8601_read(x)
 }
@@ -15,7 +15,15 @@ iso8601_read(x)
     is 'YYYY', in which case integer class data is returned.
 }
 \description{
-Read ISO 8601 formatted date times into POSIXct, POSIXt.
+Read ISO 8601 formatted dates and times into POSIXct, POSIXt.
+}
+\details{
+`iso8601_read` provides a lightweight option for reading ISO 8601 data 
+    in the POSIXct POXIXt class. This function uses regular expressions to 
+    extract the orders and time zone offset arguments and then passess the 
+    info to `lubridate::parse_date_time` for parsing. Use 
+    `lubridate::parse_date_time` for more options on handling time zone 
+    offsets and locales.
 }
 \examples{
 # Read date time strings

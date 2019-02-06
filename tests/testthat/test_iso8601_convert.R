@@ -645,3 +645,94 @@ testthat::test_that('date HMS', {
   
 })
 
+# ybd ----------------------------------------------
+
+testthat::test_that('Use abbreviated or full month name', {
+  
+  expect_equal(
+    iso8601_convert(
+      x = '15 January 2012',
+      orders = 'dby'
+    ),
+    '2012-01-15'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '15-Jan-2012',
+      orders = 'dby'
+    ),
+    '2012-01-15'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '15-Jan-2012 13',
+      orders = 'dby H'
+    ),
+    '2012-01-15T13'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '15-Jan-2012 13:59',
+      orders = 'dby HM'
+    ),
+    '2012-01-15T13:59'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '15-Jan-2012 13:59:30',
+      orders = 'dby HMS'
+    ),
+    '2012-01-15T13:59:30'
+  )
+
+})
+
+# date HMOS -------------------------------------------------------------
+
+testthat::test_that('Use decimal seconds', {
+
+  output <- iso8601_convert(
+    x = '15-Jan-2012 13:59:30.45',
+    orders = 'dby HMOS'
+  )
+  
+  expect_equal(
+    output,
+    '2012-01-15T13:59:30.45'
+  )
+  
+})
+
+# H, HM, HMS, -----------------------------------------------------------------
+
+testthat::test_that('Time only data', {
+  
+  expect_equal(
+    iso8601_convert(
+      x = '5',
+      orders = 'H'
+    ),
+    '05'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '1345',
+      orders = 'HM'
+    ),
+    '13:45'
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = '134510',
+      orders = 'HMS'
+    ),
+    '13:45:10'
+  )
+  
+})

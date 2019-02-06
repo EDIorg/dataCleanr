@@ -2,7 +2,7 @@
 % Please edit documentation in R/iso8601_get_format_string.R
 \name{iso8601_get_format_string}
 \alias{iso8601_get_format_string}
-\title{Get the format string used in a set of ISO 8601 date times}
+\title{Get the format string specifier of ISO 8601 strings}
 \usage{
 iso8601_get_format_string(x)
 }
@@ -13,11 +13,16 @@ iso8601_get_format_string(x)
 \value{
 (character) A date time format string representing user supplied ISO 
     8601 data. If more than one date time format is present, then the mode
-    is returned.
+    is returned along with a warning message.
 }
 \description{
-Get the format string of user supplied ISO 8601 date times (e.g. 
-    'YYYY-MM-DDThh:mm:ss).
+Get the format string specifier (e.g. 'YYYY-MM-DD') from a set of ISO 
+    8601 dates and times in the format output by `iso8601_convert`.
+}
+\details{
+`iso8601_get_format_string` uses regular expressions to parse input data 
+    and identify the format string(s) present in a set of ISO 8601 dates and 
+    times in the format output by `iso8601_convert`.
 }
 \examples{
 # Get format strings
@@ -25,4 +30,6 @@ iso8601_get_format_string('2012-05-01')
 iso8601_get_format_string('2012-05-01T13')
 iso8601_get_format_string('2012-05-01T13:29:54+05')
 
+# Expect a warning when more than one format is present.
+iso8601_get_format_string(c('2012-05-01', '2012-05-02', '2012-05-03 13:45:30'))
 }
