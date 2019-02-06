@@ -2,14 +2,21 @@
 #'
 #' @description
 #'    Convert date and time character strings to the standard ISO 8601 format,
-#'    with output precision matching inputs, and full support of timezone 
-#'    offsets. NOTE: This function does not convert to all ISO 8601 formats.
-#'    Currently supported formats include calendar dates, times, and time zone
-#'    offsets. Week dates, ordinal dates, and time intervals are not yet 
-#'    supported.
+#'    with output resolution matching inputs, and full support of timezone 
+#'    offsets. 
 #'    
-#'    This function is a wrapper to `lubridate::parse_datetime` and supports
-#'    a subset of the associated arguments.
+#'    NOTE: This function does not convert to all ISO 8601 formats. Currently
+#'    supported formats include calendar dates, times, time zones, and valid
+#'    combinations of these. Week dates, ordinal dates, and time intervals are 
+#'    not yet supported.
+#'    
+#' @details
+#'    `iso8601_convert` leverages the power of `lubridate::parse_date_time` to 
+#'    parse dates and times, then uses regular expressions on the user supplied
+#'    `orders` argument to identify resolution of the input data, and then 
+#'    outputs the converted data in this same resolution. Most of the arguments
+#'    available to `lubridate::parse_date_time` can be used with 
+#'    `iso8601_convert`.
 #'
 #' @usage iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
 #'     train = TRUE, drop = FALSE)
@@ -17,13 +24,13 @@
 #' @param x
 #'     (character) A vector of dates and times.
 #' @param orders
-#'     (character) A vector of date-time formats. Each order string is a series 
+#'     (character) \emph{From lubridate 1.7.4.90000 documentation:}
+#'     A vector of date-time formats. Each order string is a series 
 #'     of formatting characters as listed in `base::strptime()` but might not 
 #'     include the "%" prefix. For example, "ymd" will match all the possible
 #'     dates in year, month, day order. Formatting orders might include 
 #'     arbitrary separators. These are discarded. See details for implemented 
-#'     formats. \emph{The above definition was copied directly from lubridate
-#'     1.7.4.90000 documentation.}.
+#'     formats.
 #'     
 #'     The list below contains recognized formats.
 #'    \itemize{
@@ -42,9 +49,11 @@
 #'     }
 #' @param tz
 #'     (character) Time zone offset with respect to UTC (e.g. '+5', '-11'). 
-#'     NOTE: Time zone names abbreviations (e.g. 'UTC') are not supported.
+#'     NOTE: This argument is different than `tz` supplied to 
+#'     `lubridate::parse_date_time`.
 #' @param truncated
-#'     (integer) Number of formats that can be missing. The most common type of
+#'     (integer) \emph{From lubridate 1.7.4.90000 documentation:}
+#'     Number of formats that can be missing. The most common type of
 #'     irregularity in date-time data is the truncation due to rounding or 
 #'     unavailability of the time stamp. If the `truncated` parameter is 
 #'     non-zero, then truncated formats are also checked. For example, if the
@@ -53,13 +62,15 @@
 #'     \emph{The above definition was slightly modified from lubridate 
 #'     1.7.4.90000 documentation.}
 #' @param exact
-#'     (logical) If `TRUE`, the `orders` parameter is interpreted as an exact 
+#'     (logical) \emph{From lubridate 1.7.4.90000 documentation:}
+#'     If `TRUE`, the `orders` parameter is interpreted as an exact 
 #'     `base::strptime()` format and no training or guessing are performed 
 #'     (i.e. `train`, `drop` parameters are irrelevant). \emph{The above 
 #'     definition was copied directly from lubridate 1.7.4.90000 
 #'     documentation.}
 #' @param train
-#'     (logical) Whether to train formats on a subset of the input vector. The
+#'     (logical) \emph{From lubridate 1.7.4.90000 documentation:}
+#'     Whether to train formats on a subset of the input vector. The
 #'     resut of this is that supplied orders are sorted according to 
 #'     performance on this training set, which commonly results in increased 
 #'     performance. Please note that even when `train = FALSE` (and 
@@ -68,7 +79,8 @@
 #'     `All formats failed to parse` error. \emph{The above definition was 
 #'     copied directly from lubridate 1.7.4.90000 documentation.}
 #' @param drop
-#'     (logical) Whether to drop formats that didn't match on the training set.
+#'     (logical) \emph{From lubridate 1.7.4.90000 documentation:}
+#'     Whether to drop formats that didn't match on the training set.
 #'     If `FALSE`, unmatched on the training set formats are tried as a laast 
 #'     resort at the end of the parsing queue. Applies only when 
 #'     `train = TRUE`. Setting this parameter to `TRUE` might slightly speed 
@@ -79,22 +91,29 @@
 #'     1.7.4.90000 documentation.}
 #'
 #' @return
-#'     (character) A vector of dates and times in the ISO 8601 standard to the 
-#'     precision of the input date and time value. Convert to POSIXct and 
-#'     POSIXlt by passing outputs to `dataCleanr::iso8601_read`.
+#'     (character) A vector of dates and times in the ISO 8601 standard in the 
+#'     resolution of the input date and time value. The ISO 8601 standard 
+#'     format output by this function is a combination of calendar dates, 
+#'     times, time zone offsets, and valid combinations of these.
 #'
 #' @examples 
-#'    # Convert dates and times of varying formats
-#'    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd HMS')
-#'    iso8601_convert(x = '05/01/2012 13:29', orders = 'mdy HM')
-#'    iso8601_convert(x = '20120501 13', orders = '%Y%m%d %H')
+#'    # Convert dates and times of varying resolution
+#'    
+#'    iso8601_convert(x = '2012', orders = 'y')
+#'    iso8601_convert(x = '01/05/2012', orders = 'dmy')
+#'    iso8601_convert(x = '01-May-2012', orders = 'dby')
+#'    iso8601_convert(x = '132954', orders = 'HMS')
+#'    iso8601_convert(x = '132954', orders = 'HMS', tz = '-05')
+#'    iso8601_convert(x = '20120501 132954', orders = 'Ymd HMS', tz = '-05')
 #' 
-#'    # Convert dates and times and include a time zone offset
-#'    iso8601_convert(x = '2012-05-01 13:29:54', orders = 'ymd_HMS', tz = '-3')
-#'    iso8601_convert(x = '2012-05-01 13', orders = 'ymd_H', tz = '+5')
-#' 
-#'    # Variance in input format is supported as long as orders are defined
+#'    # Variance of input format is supported as long as orders are defined.
+#'    # NOTE: Output resolution matches input resolution.
+#'    
 #'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
+#'    
+#'    # Force output resolution to be the same
+#'    
+#'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HMS', 'dmy_HMS'), truncated = 3)
 #'
 #' @export
 #'
@@ -151,7 +170,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%H')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -174,7 +192,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%H:%M')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -197,7 +214,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%H:%M:%S')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -232,7 +248,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%d')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -267,7 +282,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -302,7 +316,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M')[!is.na(output)]
     x[!is.na(output)] <- NA
   }
@@ -337,7 +350,6 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
-    output[!use_i] <- NA
     if (stringr::str_detect(orders[use_i], '(OS|%OS)$')){
       decsec <- as.character(max(nchar(unlist(stringr::str_extract_all(x, '\\.[:digit:]*$')))-1))
       x_converted[!is.na(output)] <- format(output, paste0('%Y-%m-%dT%H:%M:%OS', decsec))[!is.na(output)]
