@@ -3,15 +3,17 @@
 
 # dataCleanr
 
-`dataCleanr` is designed to make it easy for you to prepare your data for archive and reuse.
+`dataCleanr` is designed for addressing common data management tasks encountered when preparing data for archive and reuse. Many of these functions were created by the Environmental Data Initiative's Data Curation Team to accelerate their data curation efficiency, and we welcome contributions from anyone.
 
 ## Installation
+
 ```
 # Install from GitHub
 devtools::install_github("EDIorg/dataCleanr")
 ```
 
 ## Usage
+
 Check out available functions and use cases at https://EDIorg.github.io/dataCleanr/
 
 ## Contributing
