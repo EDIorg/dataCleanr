@@ -5,8 +5,11 @@
 #'
 #' @details
 #'     `iso8601_read` provides a lightweight option for reading ISO 8601 data 
-#'     "as is" in the POSIXct POXIXt class. Use `lubridate::parse_date_time` 
-#'     for more options on handling time zone offsets and locales.
+#'     in the POSIXct POXIXt class. This function uses regular expressions to 
+#'     extract the orders and time zone offset arguments and then passess the 
+#'     info to `lubridate::parse_date_time` for parsing. Use 
+#'     `lubridate::parse_date_time` for more options on handling time zone 
+#'     offsets and locales.
 #'
 #' @usage iso8601_read(x)
 #'
