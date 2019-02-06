@@ -127,8 +127,8 @@ This function is a wrapper to `lubridate::parse_datetime` and supports
     
     </div>
 
-    <pre class="usage"><span class='fu'>iso8601_convert</span>(<span class='no'>x</span>, <span class='no'>orders</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-    <span class='kw'>exact</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>train</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+    <pre class="usage"><span class='fu'>iso8601_convert</span>(<span class='no'>x</span>, <span class='no'>orders</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>exact</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <span class='kw'>train</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -151,11 +151,14 @@ This function is a wrapper to `lubridate::parse_datetime` and supports
      centry format (Y).</p></li>
 <li><p>Y Year with century.</p></li>
 <li><p>m Month as decimal number (01--12 or 1--12).</p></li>
+<li><p>b Abbreviated or full month name in the current locale. The 
+     C parser currently understands only English month names.</p></li>
 <li><p>d Day of the month as decimal number (01--31 or 1--31).</p></li>
 <li><p>H Hours as decimal number (00--24 or 0--24).</p></li>
 <li><p>M Minute as decimal number (00--59 or 0--59)</p></li>
 <li><p>S Second as decimal number (00--61 or 0--61), allowing for
      up to two leap-seconds.</p></li>
+<li><p>OS Fractional second.</p></li>
 </ul></td>
     </tr>
     <tr>
