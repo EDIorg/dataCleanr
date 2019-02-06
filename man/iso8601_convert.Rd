@@ -79,7 +79,9 @@ behavior when rare patterns where not present in the training set.
 \description{
 Convert date and time character strings to the standard ISO 8601 format,
    with output precision matching inputs, and full support of timezone 
-   offsets. NOTE: Week dates, ordinal dates, and time only data are not yet 
+   offsets. NOTE: This function does not convert to all ISO 8601 formats.
+   Currently supported formats include calendar dates, times, and time zone
+   offsets. Week dates, ordinal dates, and time intervals are not yet 
    supported.
    
    This function is a wrapper to `lubridate::parse_datetime` and supports

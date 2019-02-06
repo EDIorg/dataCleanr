@@ -2,7 +2,7 @@
 % Please edit documentation in R/iso8601_get_format_string.R
 \name{iso8601_get_format_string}
 \alias{iso8601_get_format_string}
-\title{Get the format string used in a set of ISO 8601 date times}
+\title{Get the format specifier of ISO 8601 strings}
 \usage{
 iso8601_get_format_string(x)
 }

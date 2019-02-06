@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Data interoperability is improved with the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, the Environmental Data Initiative has developed the set of `iso8601_*` functions addressing the common use cases of date time conversion, format string detection, and import to R as POSIXct and POSIXlt. This vignette provides an overview of these functions, their capabilities, and limitations.
+Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we've developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 into R as POSIXct and POSIXt. This vignette provides an overview of these functions, their capabilities, and limitations.
 
 ```{r instload dataCleanr, message=FALSE, warning=FALSE}
 # Install and load dataCleanr
@@ -26,37 +26,45 @@ library(dataCleanr)
 
 ## Conversion
 
+`iso8601_convert` uses `lubridate::parse_datetime` to read date and time strings into R and then outputs ISO 8601 formatted strings of a precision matching that of inputs. For a full list of parsing arguments, see `iso8601_convert` documentation.
+
 Converting dates represented by a single format is easy.
 
 ```{r one format, echo=TRUE, paged.print=TRUE}
-# Example data
+# Example data in one format
 head(data_iso8601$date)
 
-# Convert to ISO 8601
+# Convert
 x <- iso8601_convert(x = data_iso8601$date, orders = 'mdy')
 head(x)
 ```
 
-Converting dates represented by two formats only requires adding the second format to the `orders` argument. If only one format is supplied to orders, then a helpful warning message is printed.
+Data containing more than one format requires a little more work.
 
 ```{r two formats, echo=TRUE, paged.print=TRUE}
-# Example data
-data_iso8601$date_2_formats
+# Example data in two formats
+head(data_iso8601$date_2_formats)
 
-# Convert with inadequate orders
-iso8601_convert(x = data_iso8601$date_2_formats, orders = 'mdy')
+# If we try converting with only the 'mdy' order we receive partially converted data and a warning
+x <- iso8601_convert(x = data_iso8601$date_2_formats, orders = 'mdy')
+x
 
-# Convert with fully defined orders
+# Use the NAs to identify the order of the non-parsed data
+data_iso8601$date_2_formats[is.na(x)]
+
+# Looks like 'dmy'. Add it to the list of orders and retry
 iso8601_convert(x = data_iso8601$date_2_formats, orders = c('mdy', 'dmy'))
+
+# Success!!!
 ```
 
-Time zone offsets are supplied as a two digit hour with a '+' or '-' with respect to UTC.
+Time zone offsets are added as a two digit hour with a '+' or '-' with respect to UTC.
 
 ```{r datetimes with offset, echo=TRUE, paged.print=TRUE}
-# Example data
+# Example data with dates and times
 head(data_iso8601$datetime)
 
-# Convert to ISO 8601
+# Convert
 x <- iso8601_convert(x = data_iso8601$datetime, orders = 'mdy HMS', tz = '-05')
 head(x)
 ```
@@ -71,23 +79,23 @@ data_iso8601$datetime_mess
 iso8601_convert(x = data_iso8601$datetime_mess, orders = c('ymd', 'mdy', 'dmy HMS'))
 ```
 
-## Datetime format string detection
+## Get the datetime format string
 
-Automated extraction of metadata content from data entities streamlines data archiving tasks. Retrieve the date time format specifier from a vector of ISO 8601 data created with `iso8601_convert` using `iso8601_get_format_string`.
+Automated extraction of metadata content from data entities streamlines data archiving tasks. Use `iso8601_get_format_string` to retrieve the date time format specifier (e.g. 'YYYY-MM-DD') from a vector of ISO 8601 strings created with `iso8601_convert`.
 
 ```{r format string, echo=TRUE, paged.print=TRUE}
-# Input data
+# Create ISO 8601 datetime strings
 data_converted <- iso8601_convert(x = data_iso8601$datetime, orders = 'mdy HMS', tz = '-05')
 head(data_converted)
 
-# Get format string
+# Get the format string
 iso8601_get_format_string(x = data_converted)
 ```
 
 If more than one date time format exists, `iso8601_get_format_string` returns the mode.
 
 ```{r format string mode, echo=TRUE, paged.print=TRUE}
-# Input data
+
 data_converted <- c(
   '2012-05-15T13:45:00',
   '2012-06-15T13:45:00',
@@ -97,13 +105,12 @@ data_converted <- c(
   '2012-10-15T13'
 )
 
-# Get the most common format
 iso8601_get_format_string(x = data_converted)
 ```
 
 ## Reading into R
 
-To read ISO 8601 formatted dates and times into R as POSIXct POSIXt, use `iso8601_read`.
+Use `iso8601_read` to read ISO 8601 formatted dates and times into R as POSIXct POSIXt.
 
 ```{r read, echo=TRUE, paged.print=TRUE}
 # Input data
@@ -114,3 +121,4 @@ head(data_converted)
 x <- iso8601_read(x = data_converted)
 head(x)
 class(x)
+```

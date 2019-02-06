@@ -1,7 +1,7 @@
-#' Read ISO 8601 date times into R as POSIXct, POSIXt
+#' Read ISO 8601 formatted strings into POSIXct, POSIXt
 #'
 #' @description
-#'     Read ISO 8601 formatted date times into POSIXct, POSIXt.
+#'     Read ISO 8601 formatted dates and times into POSIXct, POSIXt.
 #'
 #' @usage iso8601_read(x)
 #'

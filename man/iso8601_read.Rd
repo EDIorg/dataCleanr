@@ -2,7 +2,7 @@
 % Please edit documentation in R/iso8601_read.R
 \name{iso8601_read}
 \alias{iso8601_read}
-\title{Read ISO 8601 date times into R as POSIXct, POSIXt}
+\title{Read ISO 8601 formatted strings into POSIXct, POSIXt}
 \usage{
 iso8601_read(x)
 }
@@ -15,7 +15,7 @@ iso8601_read(x)
     is 'YYYY', in which case integer class data is returned.
 }
 \description{
-Read ISO 8601 formatted date times into POSIXct, POSIXt.
+Read ISO 8601 formatted dates and times into POSIXct, POSIXt.
 }
 \examples{
 # Read date time strings

@@ -1,4 +1,4 @@
-#' Get the format string used in a set of ISO 8601 date times
+#' Get the format specifier of ISO 8601 strings
 #'
 #' @description
 #'     Get the format string of user supplied ISO 8601 date times (e.g. 
