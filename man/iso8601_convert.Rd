@@ -4,8 +4,8 @@
 \alias{iso8601_convert}
 \title{Convert dates and times to ISO 8601}
 \usage{
-iso8601_convert(x, orders, tz = NULL, truncated = 0, 
-    exact = FALSE, train = TRUE, drop = FALSE)
+iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
+    train = TRUE, drop = FALSE)
 }
 \arguments{
 \item{x}{(character) A vector of dates and times.}
@@ -24,11 +24,14 @@ iso8601_convert(x, orders, tz = NULL, truncated = 0,
      centry format (Y).
      \item{Y} Year with century.
      \item{m} Month as decimal number (01--12 or 1--12).
+     \item{b} Abbreviated or full month name in the current locale. The 
+     C parser currently understands only English month names.
      \item{d} Day of the month as decimal number (01--31 or 1--31).
      \item{H} Hours as decimal number (00--24 or 0--24).
      \item{M} Minute as decimal number (00--59 or 0--59)
      \item{S} Second as decimal number (00--61 or 0--61), allowing for
      up to two leap-seconds.
+     \item{OS} Fractional second.
  }}
 
 \item{tz}{(character) Time zone offset with respect to UTC (e.g. '+5', '-11'). 

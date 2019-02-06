@@ -9,8 +9,8 @@
 #'    This function is a wrapper to `lubridate::parse_datetime` and supports
 #'    a subset of the associated arguments.
 #'
-#' @usage iso8601_convert(x, orders, tz = NULL, truncated = 0, 
-#'     exact = FALSE, train = TRUE, drop = FALSE)
+#' @usage iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
+#'     train = TRUE, drop = FALSE)
 #'
 #' @param x
 #'     (character) A vector of dates and times.
@@ -29,11 +29,14 @@
 #'         centry format (Y).
 #'         \item{Y} Year with century.
 #'         \item{m} Month as decimal number (01--12 or 1--12).
+#'         \item{b} Abbreviated or full month name in the current locale. The 
+#'         C parser currently understands only English month names.
 #'         \item{d} Day of the month as decimal number (01--31 or 1--31).
 #'         \item{H} Hours as decimal number (00--24 or 0--24).
 #'         \item{M} Minute as decimal number (00--59 or 0--59)
 #'         \item{S} Second as decimal number (00--61 or 0--61), allowing for
 #'         up to two leap-seconds.
+#'         \item{OS} Fractional second.
 #'     }
 #' @param tz
 #'     (character) Time zone offset with respect to UTC (e.g. '+5', '-11'). 
@@ -94,8 +97,8 @@
 #' @export
 #'
 
-iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, 
-                         exact = FALSE, train = TRUE, drop = FALSE){
+iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
+                            train = TRUE, drop = FALSE){
   
   # Check arguments -----------------------------------------------------------
   
@@ -126,22 +129,93 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
   
   x_converted <- rep(NA_character_, length(x))
   
+  # Resolution = H ------------------------------------------------------------
+  
+  use_i <- stringr::str_detect(
+    orders, 
+    paste0(
+      '^(H|%H)$'
+    )
+  )
+  
+  if (sum(use_i) > 0){
+    output <- suppressWarnings(
+      lubridate::parse_date_time(
+        x = x,
+        orders = orders[use_i],
+        truncated = truncated, 
+        exact = exact, 
+        train = train, 
+        drop = drop
+      )
+    )
+    output[!use_i] <- NA
+    x_converted[!is.na(output)] <- format(output, '%H')[!is.na(output)]
+    x[!is.na(output)] <- NA
+  }
+  
+  # Resolution = HM -----------------------------------------------------------
+  
+  use_i <- stringr::str_detect(
+    orders, 
+    '^(H|%H)([:space:]|[:punct:])*(M|%M)$'
+  )
+  
+  if (sum(use_i) > 0){
+    output <- suppressWarnings(
+      lubridate::parse_date_time(
+        x = x,
+        orders = orders[use_i],
+        truncated = truncated, 
+        exact = exact, 
+        train = train, 
+        drop = drop
+      )
+    )
+    output[!use_i] <- NA
+    x_converted[!is.na(output)] <- format(output, '%H:%M')[!is.na(output)]
+    x[!is.na(output)] <- NA
+  }
+  
+  # Resolution = HMS ----------------------------------------------------------
+  
+  use_i <- stringr::str_detect(
+    orders, 
+    '^(H|%H)([:space:]|[:punct:])*(M|%M)([:space:]|[:punct:])*(S|%S)$'
+  )
+  
+  if (sum(use_i) > 0){
+    output <- suppressWarnings(
+      lubridate::parse_date_time(
+        x = x,
+        orders = orders[use_i],
+        truncated = truncated, 
+        exact = exact, 
+        train = train, 
+        drop = drop
+      )
+    )
+    output[!use_i] <- NA
+    x_converted[!is.na(output)] <- format(output, '%H:%M:%S')[!is.na(output)]
+    x[!is.na(output)] <- NA
+  }
+  
   # Resolution = date ---------------------------------------------------------
 
   use_i <- stringr::str_detect(
     orders, 
     paste0(
-      '((%Y|%y)[:punct:]*%m[:punct:]*%d$)',
+      '((%Y|%y)[:punct:]*(%m|%b)[:punct:]*%d$)',
       '|',
-      '((Y|y)([:space:]|[:punct:])*m([:space:]|[:punct:])*d$)',
+      '((Y|y)([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*d$)',
       '|',
-      '(%m[:punct:]*%d[:punct:]*(%Y|%y)$)',
+      '((%m|%b)[:punct:]*%d[:punct:]*(%Y|%y)$)',
       '|',
       '(m([:space:]|[:punct:])*d([:space:]|[:punct:])*(Y|y)$)',
       '|',
-      '(%d[:punct:]*%m[:punct:]*(%Y|%y)$)',
+      '(%d[:punct:]*(%m|%b)[:punct:]*(%Y|%y)$)',
       '|',
-      '(d([:space:]|[:punct:])*m([:space:]|[:punct:])*(Y|y)$)'
+      '(d([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*(Y|y)$)'
     )
   )
   
@@ -166,17 +240,17 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
   use_i <- stringr::str_detect(
     orders, 
     paste0(
-      '((%Y|%y)[:punct:]*%m[:punct:]*%d[:blank:]%H$)',
+      '((%Y|%y)[:punct:]*(%m|%b)[:punct:]*%d[:blank:]%H$)',
       '|',
-      '((Y|y)([:space:]|[:punct:])*m([:space:]|[:punct:])*d([:space:]|[:punct:])*H$)',
+      '((Y|y)([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*d([:space:]|[:punct:])*H$)',
       '|',
-      '(%m[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H$)',
+      '((%m|%b)[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H$)',
       '|',
       '(m([:space:]|[:punct:])*d([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H$)',
       '|',
-      '(%d[:punct:]*%m[:punct:]*(%Y|%y)[:blank:]%H$)',
+      '(%d[:punct:]*(%m|%b)[:punct:]*(%Y|%y)[:blank:]%H$)',
       '|',
-      '(d([:space:]|[:punct:])*m([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H$)'
+      '(d([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H$)'
     )
   )
   
@@ -201,17 +275,17 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
   use_i <- stringr::str_detect(
     orders, 
     paste0(
-      '((%Y|%y)[:punct:]*%m[:punct:]*%d[:blank:]%H[:punct:]*%M$)',
+      '((%Y|%y)[:punct:]*(%m|%b)[:punct:]*%d[:blank:]%H[:punct:]*%M$)',
       '|',
-      '((Y|y)([:space:]|[:punct:])*m([:space:]|[:punct:])*d([:space:]|[:punct:])*H([:space:]|[:punct:])*M$)',
+      '((Y|y)([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*d([:space:]|[:punct:])*H([:space:]|[:punct:])*M$)',
       '|',
-      '(%m[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M$)',
+      '((%m|%b)[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M$)',
       '|',
       '(m([:space:]|[:punct:])*d([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M$)',
       '|',
-      '(%d[:punct:]*%m[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M$)',
+      '(%d[:punct:]*(%m|%b)[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M$)',
       '|',
-      '(d([:space:]|[:punct:])*m([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M$)'
+      '(d([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M$)'
     )
   )
   
@@ -236,17 +310,17 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
   use_i <- stringr::str_detect(
     orders, 
     paste0(
-      '((%Y|%y)[:punct:]*%m[:punct:]*%d[:blank:]%H[:punct:]*%M[:punct:]*%S$)',
+      '((%Y|%y)[:punct:]*(%m|%b)[:punct:]*%d[:blank:]%H[:punct:]*%M[:punct:]*(%S|%OS)$)',
       '|',
-      '((Y|y)([:space:]|[:punct:])*m([:space:]|[:punct:])*d([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*S$)',
+      '((Y|y)([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*d([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*(S|OS)$)',
       '|',
-      '(%m[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M[:punct:]*%S$)',
+      '((%m|%b)[:punct:]*%d[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M[:punct:]*(%S|%OS)$)',
       '|',
-      '(m([:space:]|[:punct:])*d([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*S$)',
+      '(m([:space:]|[:punct:])*d([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*(S|OS)$)',
       '|',
-      '(%d[:punct:]*%m[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M[:punct:]*%S$)',
+      '(%d[:punct:]*(%m|%b)[:punct:]*(%Y|%y)[:blank:]%H[:punct:]*%M[:punct:]*(%S|%OS)$)',
       '|',
-      '(d([:space:]|[:punct:])*m([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*S$)'
+      '(d([:space:]|[:punct:])*(m|b)([:space:]|[:punct:])*(Y|y)([:space:]|[:punct:])*H([:space:]|[:punct:])*M([:space:]|[:punct:])*(S|OS)$)'
     )
   )
   
@@ -262,21 +336,13 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
       )
     )
     output[!use_i] <- NA
-    x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
+    if (stringr::str_detect(orders[use_i], '(OS|%OS)$')){
+      decsec <- as.character(max(nchar(unlist(stringr::str_extract_all(x, '\\.[:digit:]*$')))-1))
+      x_converted[!is.na(output)] <- format(output, paste0('%Y-%m-%dT%H:%M:%OS', decsec))[!is.na(output)]
+    } else {
+      x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
+    }
     x[!is.na(output)] <- NA
-  }
-
-  # Send warning if parsing is incomplete -------------------------------------
-  
-  if (sum(is.na(x_converted)) > 0){
-    warning(
-      paste0(
-        'Date-times failed to parse at lines:\n',
-        paste(seq(length(is.na(x_converted)))[is.na(x_converted)], collapse = ', '),
-        '\nYou may need to update the list of formats supplied to the "orders" argument.'
-      )
-    )
-    
   }
   
   # Add timezone offset -------------------------------------------------------
@@ -303,6 +369,15 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0,
   
   # Output --------------------------------------------------------------------
   
+ 
+  if (sum(is.na(x_converted)) > 0){
+    warning(
+      paste0(
+        'Some data failed to parse. Consider updating your list of orders.'
+      )
+    )
+  }
+   
   x_converted
   
 }
