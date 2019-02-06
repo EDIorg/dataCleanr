@@ -72,21 +72,31 @@ testthat::test_that('Test possible formats.', {
 testthat::test_that('Assume all timezone offsets are identical', {
   
   expect_equal(
+    suppressWarnings(iso8601_get_format_string(
+      x = c(
+        '2012-05-01T13:45:23-05',
+        NA_character_,
+        '2012-05-01T13:45:23-05'
+      )
+    )),
+    'YYYY-MM-DDThh:mm:ss-hh'
+  )
+  
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23-05',
         NA_character_,
         '2012-05-01T13:45:23+05'
       )
-    ),
-    'YYYY-MM-DDThh:mm:ss-hh'
+    )
   )
   
   expect_equal(
     iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23+05',
-        '2012-05-01T13:45:23-05'
+        '2012-05-01T13:45:23+05'
       )
     ),
     'YYYY-MM-DDThh:mm:ss+hh'
