@@ -58,7 +58,14 @@
   </ul>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/EDIorg/dataCleanr">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -73,9 +80,9 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-06</h4>
+            <h4 class="date">2019-02-07</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
 
     </div>
@@ -204,11 +211,11 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 <span class="co"># Read data into R</span>
 x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_read.html">iso8601_read</a></span>(x_cnv)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(x_pos)
-<span class="co">#&gt; $tzone</span>
-<span class="co">#&gt; [1] "Etc/GMT-5"</span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; $class</span>
-<span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></code></pre></div>
+<span class="co">#&gt; [1] "POSIXct" "POSIXt" </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $tzone</span>
+<span class="co">#&gt; [1] "Etc/GMT-5"</span></code></pre></div>
 <p>Now that the data are in POSIX, the myriad of date and time functions of <code>lubridate</code> are available to you.</p>
 </div>
   </div>
@@ -233,7 +240,7 @@ x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso86
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>
