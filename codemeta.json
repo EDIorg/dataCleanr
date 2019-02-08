@@ -1,0 +1,115 @@
+{
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
+  "@type": "SoftwareSourceCode",
+  "identifier": "dataCleanr",
+  "description": "\n    dataCleanr is designed for addressing common data management tasks \n    encountered when preparing data for archive and reuse. Many of these \n    functions were created by the Environmental Data Initiative's Data \n    Curation Team to accelerate their data curation efficiency, and we \n    welcome contributions from anyone.",
+  "name": "dataCleanr: A collection of user friendly data cleaning functions",
+  "codeRepository": "https://github.com/EDIorg/dataCleanr",
+  "relatedLink": "https://ediorg.github.io/dataCleanr/",
+  "issueTracker": "https://github.com/EDIorg/dataCleanr/issues",
+  "license": "GPL 2.0",
+  "version": "0.0.0.9000",
+  "programmingLanguage": {
+    "@type": "ComputerLanguage",
+    "name": "R",
+    "version": "3.5.2",
+    "url": "https://r-project.org"
+  },
+  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "author": [
+    {
+      "@type": "Person",
+      "givenName": "Colin",
+      "familyName": "Smith",
+      "email": "colin.smith@wisc.edu",
+      "@id": "https://orcid.org/0000-0003-2261-9931"
+    }
+  ],
+  "contributor": {},
+  "copyrightHolder": {},
+  "funder": {},
+  "maintainer": [
+    {
+      "@type": "Person",
+      "givenName": "Colin",
+      "familyName": "Smith",
+      "email": "colin.smith@wisc.edu",
+      "@id": "https://orcid.org/0000-0003-2261-9931"
+    }
+  ],
+  "softwareSuggestions": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "testthat",
+      "name": "testthat",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=testthat"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "knitr",
+      "name": "knitr",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=knitr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "rmarkdown",
+      "name": "rmarkdown",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    }
+  ],
+  "softwareRequirements": [
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "stringr",
+      "name": "stringr",
+      "version": ">= 1.2.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=stringr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "lubridate",
+      "name": "lubridate",
+      "version": ">= 1.7.4",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=lubridate"
+    }
+  ],
+  "readme": "https://github.com/clnsmth/dataCleanr/blob/master/README.md",
+  "fileSize": "63.015KB",
+  "contIntegration": [
+    "https://travis-ci.org/EDIorg/dataCleanr",
+    "https://codecov.io/github/EDIorg/dataCleanr?branch=master"
+  ]
+}
