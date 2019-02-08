@@ -1,12 +1,18 @@
 Package: dataCleanr
-Title: Functions for cleaning data
+Title: A collection of user friendly data cleaning functions
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Colin",
            family = "Smith",
            role = c("aut", "cre"),
-           email = "colin.smith@wisc.edu")
-Description: Functions for general data cleaning tasks
+           email = "colin.smith@wisc.edu",
+           comment = "https://orcid.org/0000-0003-2261-9931")
+Description:
+    dataCleanr is designed for addressing common data management tasks 
+    encountered when preparing data for archive and reuse. Many of these 
+    functions were created by the Environmental Data Initiative's Data 
+    Curation Team to accelerate their data curation efficiency, and we 
+    welcome contributions from anyone.
 Imports:
     stringr (>= 1.2.0),
     lubridate (>= 1.7.4)
