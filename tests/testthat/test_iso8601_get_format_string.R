@@ -50,6 +50,27 @@ testthat::test_that('Test possible formats.', {
     'YYYY'
   )
   
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45:13'
+    ),
+    'hh:mm:ss'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45'
+    ),
+    'hh:mm'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13'
+    ),
+    'hh'
+  )
+  
   # Add time zones ------------------------------------------------------------
   
   expect_equal(
@@ -64,6 +85,76 @@ testthat::test_that('Test possible formats.', {
       x = '2012-05-01T13:45:23-05'
     ),
     'YYYY-MM-DDThh:mm:ss-hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45+05'
+    ),
+    'YYYY-MM-DDThh:mm+hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45-05'
+    ),
+    'YYYY-MM-DDThh:mm-hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13+05'
+    ),
+    'YYYY-MM-DDThh+hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13-05'
+    ),
+    'YYYY-MM-DDThh-hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45:13+05'
+    ),
+    'hh:mm:ss+hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45:13-05'
+    ),
+    'hh:mm:ss-hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45+05'
+    ),
+    'hh:mm+hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45-05'
+    ),
+    'hh:mm-hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13+05'
+    ),
+    'hh+hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13-05'
+    ),
+    'hh-hh'
   )
 
 })

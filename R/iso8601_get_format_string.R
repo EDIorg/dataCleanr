@@ -52,7 +52,11 @@ iso8601_get_format_string <- function(x){
     } else {
       tz_sign <- NULL
     }
-  } else {
+  } else if (stringr::str_count(x, '\\-') == 1){
+    tz_sign <- '-'
+  } else if (stringr::str_count(x, '\\+') == 1){
+    tz_sign <- '+'
+  }else {
     tz_sign <- NULL
   }
 
@@ -79,20 +83,29 @@ iso8601_get_format_string <- function(x){
   use_i_t <- Mode(use_i_t)
   use_i_d <- Mode(use_i_d)
 
-  if (use_i == 2){
+  if ((use_i == 2) & (use_i_t == 1) & (use_i_d >= 2)){
     output <- 'YYYY-MM-DDThh:mm:ss'
   }
-  if (use_i == 1){
+  if ((use_i == 1) & (use_i_t == 1) & (use_i_d >= 2)){
     output <- 'YYYY-MM-DDThh:mm'
   }
-  if ((use_i == 0) & ((use_i_t == 1))){
+  if ((use_i == 0) & (use_i_t == 1) & (use_i_d >= 2)){
     output <- 'YYYY-MM-DDThh'
   }
-  if ((use_i == 0) & ((use_i_t != 1)) & ((use_i_d != 0))){
+  if ((use_i == 0) & ((use_i_t == 0)) & ((use_i_d == 2))){
     output <- 'YYYY-MM-DD'
   }
-  if ((use_i == 0) & ((use_i_t != 1)) & ((use_i_d == 0))){
+  if ((use_i == 0) & ((use_i_t == 0)) & ((use_i_d == 0)) & (Mode(nchar(x)) == 4)){
     output <- 'YYYY'
+  }
+  if ((use_i == 2) & ((use_i_t == 0)) & ((use_i_d == 0) | (use_i_d == 1))){
+    output <- 'hh:mm:ss'
+  }
+  if ((use_i == 1) & ((use_i_t == 0)) & ((use_i_d == 0) | (use_i_d == 1))){
+    output <- 'hh:mm'
+  }
+  if ((use_i == 0) & ((use_i_t == 0)) & ((use_i_d == 0) | (use_i_d == 1)) & ((Mode(nchar(x)) == 5) | (Mode(nchar(x)) == 2))){
+    output <- 'hh'
   }
 
   # Add timezone offset -------------------------------------------------------
