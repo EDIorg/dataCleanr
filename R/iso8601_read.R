@@ -117,6 +117,11 @@ iso8601_read <- function(x){
       
       x_converted <- as.integer(x)
       
+    } else {
+      
+      x_converted <- NULL
+      warning('Time only data is not yet supported. Please use lubridate functions to handle these data.')
+      
     }
     
     
