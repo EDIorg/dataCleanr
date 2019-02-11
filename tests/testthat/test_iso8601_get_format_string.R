@@ -2,6 +2,31 @@ context('Get format string for ISO 8601 datetime')
 
 library(dataCleanr)
 
+# Load test data --------------------------------------------------------------
+
+data <- c(
+  '2012-05-01T13:45:23+05',
+  '2012-05-01T13:45:23-05',
+  '2012-05-01T13:45:23',
+  '2012-05-01T13:45+05',
+  '2012-05-01T13:45-05',
+  '2012-05-01T13:45',
+  '2012-05-01T13+05',
+  '2012-05-01T13-05',
+  '2012-05-01T13',
+  '2012-05-01',
+  '2012',
+  '13:45:23+05',
+  '13:45:23-05',
+  '13:45:23',
+  '13:45+05',
+  '13:45-05',
+  '13:45',
+  '13+05',
+  '13-05',
+  '13'
+)
+
 # date HMS --------------------------------------------------------------------
 
 testthat::test_that('Test date HMS', {
@@ -385,7 +410,7 @@ testthat::test_that('Test format rules', {
     )
   )
   
-  expect_error(
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23',
@@ -396,7 +421,7 @@ testthat::test_that('Test format rules', {
     )
   )
   
-  expect_error(
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23',
@@ -408,7 +433,7 @@ testthat::test_that('Test format rules', {
     )
   )
   
-  expect_error(
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01',
@@ -420,7 +445,7 @@ testthat::test_that('Test format rules', {
     )
   )
   
-  expect_error(
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01',
@@ -432,7 +457,7 @@ testthat::test_that('Test format rules', {
     )
   )
   
-  expect_error(
+  expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01',
@@ -447,3 +472,29 @@ testthat::test_that('Test format rules', {
   )
 
 })
+
+# return.format = T -----------------------------------------------------------
+
+testthat::test_that('Test for output when return.format = T', {
+
+  expect_equal(
+    attributes(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01',
+          '2012-05-01',
+          '2012-05-01'
+        ),
+        return.format = T
+      )
+    ),
+    list(
+      names = c('x', 'format'),
+      class = 'data.frame',
+      row.names = c(1, 2, 3)
+    )
+  )
+  
+})
+
+

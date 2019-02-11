@@ -9,18 +9,26 @@
 #'     and identify the most common format present in a vector of ISO 8601 
 #'     strings.
 #'
-#' @usage iso8601_get_format_string(x)
+#' @usage iso8601_get_format_string(x, return.format = FALSE)
 #'
 #' @param x
 #'     (character) A vector of ISO 8601 strings created with `iso8601_convert`.
 #'     Vector contents must be one of dates and times, dates, or times. A mix 
 #'     of more than one type is not supported.
+#' @param return.format
+#'     (logical) Should format specifiers be returned with the output data? 
+#'     This argument supports identification of where differences in output
+#'     format occur.
 #'
 #' @return
 #'     (character) The date time format representing user supplied ISO 8601 
 #'     data. If more than one date time format is present, then the mode
 #'     is returned along with a warning message. An error is issued when input 
 #'     data is a mix of datetime, date, or time data.
+#'     
+#'     (data frame) If `return.format` is `TRUE` then a data frame is returned
+#'     containing the input data and format specifiers. This argument supports
+#'     identification of where differences in output format occur.
 #'
 #' @examples 
 #' # Get format strings
@@ -34,14 +42,7 @@
 #' @export
 #'
 
-iso8601_get_format_string <- function(x){
-
-  # Load helper functions -----------------------------------------------------
-  
-  Mode <- function(x) {
-    ux <- unique(x)
-    ux[which.max(tabulate(match(x, ux)))]
-  }
+iso8601_get_format_string <- function(x, return.format = FALSE){
   
   # Check arguments -----------------------------------------------------------
 
@@ -52,151 +53,127 @@ iso8601_get_format_string <- function(x){
   if (sum(is.na(x)) == length(x)){
     stop('Input argument "x" cannot be entirely NA.')
   }
-  
-  vfr <- validate_format_rules(x)
 
-  # Detect data type and time zone presence -----------------------------------
+  # Load helper function ------------------------------------------------------
   
-  x <- x[!is.na(x)]
+  Mode <- function(x) {
+    ux <- unique(x)
+    ux[which.max(tabulate(match(x, ux)))]
+  }
   
-  if (Mode(stringr::str_count(x, 'T')) > 0){
-    
-    data_type <- 'datetime'
-    
-    t_sample <- stringr::str_remove_all(x, pattern = '.+[T]')
-    
-    if (Mode(stringr::str_count(t_sample, '\\-|\\+')) > 0){
-      
-      tz_sign <- '\u00B1'
-      
-    } else {
-      
-      tz_sign <- NULL
-      
-    }
+  # Regular expressions for each possible format ------------------------------
+  
+  x_formats <- rep(NA_character_, length(x))
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh:mm:ss'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh:mm\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*$'
+      )] <- 'YYYY-MM-DD'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]{4}$'
+      )] <- 'YYYY'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'hh:mm:ss\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*$'
+      )] <- 'hh:mm:ss'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'hh:mm\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*$'
+      )] <- 'hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*(\\+|\\-)[:digit:]*$'
+      )] <- 'hh\u00B1hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]{2}$'
+      )] <- 'hh'
 
-  } else if (Mode(stringr::str_count(x, ':')) > 0){
-    
-    data_type <- 'time'
-    
-    if (stringr::str_count(x, '\\-|\\+') == 1){
-      
-      tz_sign <- '\u00B1'
+  # Return the mode of detected formats ---------------------------------------
+  
+  output <- Mode(x_formats)
 
-    } else {
-      
-      tz_sign <- NULL
-      
-    }
+  # Issue warning when more than one mode exists
+  
+  if (length(unique(x_formats)) > 1){
+    warning('More than one format was found. The returned value is the mode of the detected formats.')
+  }
+
+  # Output --------------------------------------------------------------------
+
+  if (isTRUE(return.format)){
     
-  } else if (Mode(stringr::str_count(x, '\\-')) == 2){
-    
-    data_type <- 'date'
-    
-    tz_sign <- NULL
+    data.frame(
+      x = x,
+      format = x_formats,
+      stringsAsFactors = F
+    )
     
   } else {
     
-    if (Mode(nchar(x)) == 4){
-      
-      data_type <- 'date'
-      
-      tz_sign <- NULL
-      
-    } else {
-      
-      data_type <- 'time'
-      
-      if (Mode(stringr::str_count(x, '\\-|\\+') == 1)){
-        
-        tz_sign <- '\u00B1'
-        
-      } else {
-        
-        tz_sign <- NULL
-        
-      }
-      
-    }
-
-  }
-
-  # Get format string specifier -----------------------------------------------
-
-  nc <- stringr::str_count(x, pattern = ":")
-  nt <- stringr::str_count(x, pattern = "T")
-  nd <- stringr::str_count(x, pattern = "-")
-  nd <- nd[!nd == 3]
-
-  if ((length(unique(nc)) > 1) | (length(unique(nt)) > 1) | (length(unique(nd)) > 1)){
-    warning('More than one date and time format was found. The returned value is the mode of the detected formats.')
-  }
-
-  nc <- Mode(nc)
-  nt <- Mode(nt)
-  nd <- Mode(nd)
-  
-  if (data_type == 'datetime'){
-    
-    if (nc == 2){
-      
-      output <- 'YYYY-MM-DDThh:mm:ss'
-      
-    } else if (nc == 1){
-      
-      output <- 'YYYY-MM-DDThh:mm'
-      
-    } else if (nc == 0){
-      
-      output <- 'YYYY-MM-DDThh'
-      
-    }
-    
-  } else if (data_type == 'date'){
-    
-    if (nd == 2){
-      
-      output <- 'YYYY-MM-DD'
-      
-    } else if (nd == 0){
-      
-      output <- 'YYYY'
-      
-    }
-    
-  } else if (data_type == 'time'){
-    
-    if (nc == 2){
-      
-      output <- 'hh:mm:ss'
-      
-    } else if (nc == 1){
-      
-      output <- 'hh:mm'
-      
-    } else if (nc == 0){
-      
-      output <- 'hh'
-      
-    }
+    output
     
   }
-
-  # Add timezone offset -------------------------------------------------------
-  
-  if (!is.null(tz_sign)){
-    
-    output <- paste0(
-      output,
-      tz_sign,
-      'hh'
-    )
-    
-  }
-  
-  # Output --------------------------------------------------------------------
-
-  output
 
 }
 

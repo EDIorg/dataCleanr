@@ -4,18 +4,26 @@
 \alias{iso8601_get_format_string}
 \title{Get the format used in a vector of ISO 8601 strings}
 \usage{
-iso8601_get_format_string(x)
+iso8601_get_format_string(x, return.format = FALSE)
 }
 \arguments{
 \item{x}{(character) A vector of ISO 8601 strings created with `iso8601_convert`.
 Vector contents must be one of dates and times, dates, or times. A mix 
 of more than one type is not supported.}
+
+\item{return.format}{(logical) Should format specifiers be returned with the output data? 
+This argument supports identification of where differences in output
+format occur.}
 }
 \value{
 (character) The date time format representing user supplied ISO 8601 
     data. If more than one date time format is present, then the mode
     is returned along with a warning message. An error is issued when input 
     data is a mix of datetime, date, or time data.
+    
+    (data frame) If `return.format` is `TRUE` then a data frame is returned
+    containing the input data and format specifiers. This argument supports
+    identification of where differences in output format occur.
 }
 \description{
 Get the format (e.g. 'YYYY-MM-DD') used in a vector of ISO 8601 strings.
