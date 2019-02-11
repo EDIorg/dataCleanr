@@ -19,7 +19,7 @@
 #'    `iso8601_convert`.
 #'
 #' @usage iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
-#'     train = TRUE, drop = FALSE)
+#'     train = TRUE, drop = FALSE, return.format = FALSE)
 #'
 #' @param x
 #'     (character) A vector of date and time, date, or time strings.
@@ -89,12 +89,21 @@
 #'     behavior when rare patterns where not present in the training set.
 #'     \emph{The above definition was copied directly from lubridate 
 #'     1.7.4.90000 documentation.}
+#' @param return.format
+#'     (logical) Should format specifiers be returned with the output data? 
+#'     This argument supports identification of where differences in output
+#'     resolution/precision occur.
 #'
 #' @return
 #'     (character) A vector of dates and times in the ISO 8601 standard in the 
 #'     resolution of the input date and time strings. The ISO 8601 standard 
 #'     format output by this function is a combination of calendar dates, 
 #'     times, time zone offsets, and valid combinations of these.
+#'     
+#'     (data frame) If `return.format` is `TRUE` then a data frame is returned
+#'     containing the input data, converted data, and formats of the converted 
+#'     data. This supports identification of where differences in output 
+#'     resolution/precision occur.
 #'
 #' @examples 
 #'    # Convert dates and times of varying resolution
@@ -116,7 +125,7 @@
 #'
 
 iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
-                            train = TRUE, drop = FALSE){
+                            train = TRUE, drop = FALSE, return.format = FALSE){
   
   # Check arguments -----------------------------------------------------------
   
@@ -146,9 +155,13 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     }
   }
 
-  # Initialize output vector
+  # Initialize output vector(s)
   
   x_converted <- rep(NA_character_, length(x))
+  
+  x_formats <- rep(NA_character_, length(x))
+  
+  x_raw <- x
   
   # Resolution = H ------------------------------------------------------------
   
@@ -176,6 +189,8 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     
     x[!is.na(output)] <- NA
     
+    x_formats[!is.na(output)] <- 'H'
+    
   }
   
   # Resolution = HM -----------------------------------------------------------
@@ -202,6 +217,8 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     
     x[!is.na(output)] <- NA
     
+    x_formats[!is.na(output)] <- 'HM'
+    
   }
   
   # Resolution = HMS ----------------------------------------------------------
@@ -227,6 +244,8 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%H:%M:%S')[!is.na(output)]
     
     x[!is.na(output)] <- NA
+    
+    x_formats[!is.na(output)] <- 'HMS'
     
   }
   
@@ -266,6 +285,12 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     
     x[!is.na(output)] <- NA
     
+    x_formats[!is.na(output)] <- 'ymd'
+    
+    if (!is.null(tz)){
+      stop("Adding time zones to date only data is not supported.")
+    }
+    
   }
   
   # Resolution = date H -------------------------------------------------------
@@ -304,6 +329,8 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     
     x[!is.na(output)] <- NA
     
+    x_formats[!is.na(output)] <- 'ymd H'
+    
   }
 
   # Resolution = date HM ------------------------------------------------------
@@ -341,6 +368,8 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M')[!is.na(output)]
     
     x[!is.na(output)] <- NA
+    
+    x_formats[!is.na(output)] <- 'ymd HM'
     
   }
   
@@ -399,12 +428,16 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         )
       )[!is.na(output)]
       
+      x_formats[!is.na(output)] <- 'ymd HMOS'
+      
     } else {
       
       x_converted[!is.na(output)] <- format(
         output, 
         '%Y-%m-%dT%H:%M:%S'
       )[!is.na(output)]
+      
+      x_formats[!is.na(output)] <- 'ymd HMS'
       
     }
     
@@ -442,6 +475,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       
     }
     
+    x_formats <- paste0(
+      x_formats,
+      'Z'
+    )
+    
   }
   
   # Output --------------------------------------------------------------------
@@ -453,7 +491,31 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       )
     )
   }
-   
-  x_converted
+  
+  if (length(unique(x_formats)) > 1){
+    warning(
+      paste0(
+        'Output data contains multiple levels of precision.',
+        'Use the argument "return.res = T" to see where.'
+      )
+    )
+  }
+  
+  if (isTRUE(return.format)){
+    
+    x_converted <- data.frame(
+      x = x_raw,
+      x_converted = x_converted,
+      format = x_formats,
+      stringsAsFactors = F
+    )
+    
+    x_converted
+    
+  } else {
+    
+    x_converted
+    
+  }
   
 }

@@ -1,5 +1,6 @@
 context('ISO 8601 convert')
 library(dataCleanr)
+library(stringr)
 
 # Load data -------------------------------------------------------------------
 
@@ -70,28 +71,40 @@ testthat::test_that('Expect warnings', {
 
 testthat::test_that('Resolution of output should match input.', {
 
-  # Some test data can't be currently parsed.
-  # Remove these data
-
-  x_converted <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = c('ymd', 'ymd_h', 'ymd_hm', 'ymd_hms',
-                 'mdy', 'mdy_h', 'mdy_hm', 'mdy_hms',
-                 'dmy', 'dmy_h', 'dmy_hm', 'dmy_hms')
-      )
-    )
-
-  use_i <- x_converted == data$iso8601
-
+  use_i <- stringr::str_detect(data$orders, 'ymd_HM|ymd_HMS')
+  
   expect_equal(
-    x_converted[use_i],
+    suppressWarnings(
+      iso8601_convert(
+        x = data$raw[use_i],
+        orders = c('ymd_HM', 'ymd_HMS')
+      )
+    ),
     data$iso8601[use_i]
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_convert(
+        x = c(
+          '13:45:14',
+          '13:45',
+          '13'
+        ),
+        orders = c('HMS', 'HM', 'H')
+      )
+    ),
+    c(
+      '13:45:14',
+      '13:45',
+      '13'
+    )
   )
 
 })
 
 # Use of "tz" appends timezones to the output ---------------------------------
+# Time zones shouldn't be appended to calendar dates without times.
 
 testthat::test_that('Time zone offset should be present and formatted correctly', {
   
@@ -122,6 +135,55 @@ testthat::test_that('Time zone offset should be present and formatted correctly'
     '2012-05-01T13+05'
   )
   
+  expect_equal(
+    suppressWarnings(
+      iso8601_convert(
+        x = c(
+          '13:45:14',
+          '13:45',
+          '13'
+        ), 
+        orders = c(
+          'HMS',
+          'HM',
+          'H'
+        ), 
+        tz = '+5'
+      )
+    ),
+    c(
+      '13:45:14+05',
+      '13:45+05',
+      '13+05'
+    )
+  )
+  
+  expect_error(
+    iso8601_convert(
+      x = c(
+        '2012-05-01',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34'
+      ),
+      orders = c('ymd', 'ymd HM'),
+      tz = '+5'
+    )
+  )
+  
+  expect_error(
+    iso8601_convert(
+      x = c(
+        '2012',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34'
+      ),
+      orders = c('y', 'ymd', 'ymd HM'),
+      tz = '+5'
+    )
+  )
+  
 })
 
 # ymd -------------------------------------------------------------------------
@@ -130,45 +192,45 @@ testthat::test_that('orders = ymd', {
   
   # orders = 'ymd'
   
-  output <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = 'ymd'
-    )
-  )
+  use_i <- stringr::str_detect(data$orders, 'ymd$')
   
   expect_equal(
-    data$index[!is.na(output)],
-    data$index[data$orders == 'ymd']
+    iso8601_convert(
+      x = data$raw[use_i],
+      orders = c('ymd')
+    ),
+    data$iso8601[use_i]
   )
   
   # orders = '%Y-%m-%d' matches orders 'ymd'
   
-  output <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = '%Y-%m-%d'
-    )
-  )
+  use_i <- stringr::str_detect(data$orders, 'ymd$')
   
   expect_equal(
-    data$index[!is.na(output)],
-    data$index[data$orders == 'ymd']
+    iso8601_convert(
+      x = data$raw[use_i],
+      orders = '%Y-%m-%d'
+    ),
+    data$iso8601[use_i]
   )
   
   # orders = '%Y-%m-%d', exact = T matches exactly
   
-  output <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = '%Y-%m-%d',
-      exact = T
-    )
-  )
+  use_i <- stringr::str_detect(data$orders, 'ymd$')
   
   expect_equal(
-    data$index[!is.na(output)],
-    data$index[data$raw == '2012-05-01']
+    suppressWarnings(
+      iso8601_convert(
+        x = data$raw[use_i],
+        orders = '%Y-%m-%d',
+        exact = T
+      )
+    ),
+    c(
+      '2012-05-01',
+      NA_character_,
+      NA_character_
+    )
   )
 
 })
@@ -177,35 +239,14 @@ testthat::test_that('orders = ymd', {
 
 testthat::test_that('orders = mdy', {
   
-  # orders = 'mdy' can't parse 2 digit year
-  
-  output <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = 'mdy'
-    )
-  )
-  
-  expect_error(
-    expect_equal(
-      data$index[!is.na(output)],
-      data$index[data$orders == 'mdy']
-    )
-  )
-
-  # orders = '%m-%d-%Y', exact = T matches exactly
-  
-  output <- suppressWarnings(
-    iso8601_convert(
-      x = data$raw,
-      orders = '%m-%d-%Y',
-      exact = T
-    )
-  )
+  use_i <- stringr::str_detect(data$orders, 'mdy$')
   
   expect_equal(
-    data$index[!is.na(output)],
-    data$index[data$raw == '05-01-2012']
+    iso8601_convert(
+      x = data$raw[use_i],
+      orders = 'mdy'
+    ),
+    data$iso8601[use_i]
   )
   
 })
@@ -734,5 +775,52 @@ testthat::test_that('Time only data', {
     ),
     '13:45:10'
   )
+  
+})
+
+# return.format ---------------------------------------------------------------
+
+testthat::test_that('return.format = T outputs a data frame', {
+  
+  expect_equal(
+    class(
+      iso8601_convert(
+        x = data_iso8601$date_2_formats,
+        orders = c('mdy', 'dmy'),
+        return.format = T
+      )
+    ), 
+    'data.frame'
+  )
+
+})
+
+
+# Warn when output resolution varies ----------------------------------------------------
+
+testthat::test_that('return.format = T outputs a data frame', {
+  
+  use_i <- stringr::str_detect(data$orders, 'ymd_HM|ymd_HMS')
+  
+  expect_warning(
+    iso8601_convert(
+      x = data$raw[use_i],
+      orders = c('ymd_HM', 'ymd_HMS')
+    )
+  )
+  
+  expect_warning(
+    iso8601_convert(
+      x = c(
+        '13:45:14',
+        '13:45',
+        '13'
+      ),
+      orders = c('HMS', 'HM', 'H')
+    )
+  )
+  
+  
+  
   
 })

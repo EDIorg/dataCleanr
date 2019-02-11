@@ -5,7 +5,7 @@
 \title{Convert dates and times to ISO 8601}
 \usage{
 iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
-    train = TRUE, drop = FALSE)
+    train = TRUE, drop = FALSE, return.format = FALSE)
 }
 \arguments{
 \item{x}{(character) A vector of date and time, date, or time strings.}
@@ -75,12 +75,21 @@ parameter was implicitly `TRUE`, which resulted in occasional surprising
 behavior when rare patterns where not present in the training set.
 \emph{The above definition was copied directly from lubridate 
 1.7.4.90000 documentation.}}
+
+\item{return.format}{(logical) Should format specifiers be returned with the output data? 
+This argument supports identification of where differences in output
+resolution/precision occur.}
 }
 \value{
 (character) A vector of dates and times in the ISO 8601 standard in the 
     resolution of the input date and time strings. The ISO 8601 standard 
     format output by this function is a combination of calendar dates, 
     times, time zone offsets, and valid combinations of these.
+    
+    (data frame) If `return.format` is `TRUE` then a data frame is returned
+    containing the input data, converted data, and formats of the converted 
+    data. This supports identification of where differences in output 
+    resolution/precision occur.
 }
 \description{
 Convert date and time strings into standard ISO 8601 formatted strings,
