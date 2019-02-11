@@ -61,6 +61,7 @@ iso8601_read <- function(x){
           )
         )
       }
+      tz <- unique(tz)
     } else {
       tz <- NULL
     }
