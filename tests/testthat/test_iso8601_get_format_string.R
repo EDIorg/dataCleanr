@@ -2,52 +2,123 @@ context('Get format string for ISO 8601 datetime')
 
 library(dataCleanr)
 
-# Load data -------------------------------------------------------------------
+# date HMS --------------------------------------------------------------------
 
-data <- utils::read.table(
-  system.file('datetimes.csv', package = 'dataCleanr'),
-  header = T,
-  sep = ",",
-  as.is = T,
-  na.strings = "NA")
+testthat::test_that('Test date HMS', {
 
-# Test possible formats -------------------------------------------------------
-
-testthat::test_that('Test possible formats.', {
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45:23+05'
+    ),
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45:23-05'
+    ),
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  )
 
   expect_equal(
     iso8601_get_format_string(
       x = '2012-05-01T13:45:23'
     ),
     'YYYY-MM-DDThh:mm:ss'
-    )
+  )
 
+})
+
+# date HM ---------------------------------------------------------------------
+
+testthat::test_that('Test date HM', {
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45+05'
+    ),
+    'YYYY-MM-DDThh:mm\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13:45-05'
+    ),
+    'YYYY-MM-DDThh:mm\u00B1hh'
+  )
+  
   expect_equal(
     iso8601_get_format_string(
       x = '2012-05-01T13:45'
     ),
     'YYYY-MM-DDThh:mm'
   )
+  
+})
 
+# date H ----------------------------------------------------------------------
+
+testthat::test_that('Test date H', {
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13+05'
+    ),
+    'YYYY-MM-DDThh\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '2012-05-01T13-05'
+    ),
+    'YYYY-MM-DDThh\u00B1hh'
+  )
+  
   expect_equal(
     iso8601_get_format_string(
       x = '2012-05-01T13'
     ),
     'YYYY-MM-DDThh'
   )
+  
+})
 
+# date ------------------------------------------------------------------------
+
+testthat::test_that('Test date', {
+  
   expect_equal(
     iso8601_get_format_string(
       x = '2012-05-01'
     ),
     'YYYY-MM-DD'
   )
-  
+
   expect_equal(
     iso8601_get_format_string(
       x = '2012'
     ),
     'YYYY'
+  )
+  
+})
+
+# time ------------------------------------------------------------------------
+
+testthat::test_that('Test time', {
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45:13+05'
+    ),
+    'hh:mm:ss\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45:13-05'
+    ),
+    'hh:mm:ss\u00B1hh'
   )
   
   expect_equal(
@@ -59,9 +130,37 @@ testthat::test_that('Test possible formats.', {
   
   expect_equal(
     iso8601_get_format_string(
+      x = '13:45+05'
+    ),
+    'hh:mm\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13:45-05'
+    ),
+    'hh:mm\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
       x = '13:45'
     ),
     'hh:mm'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13+05'
+    ),
+    'hh\u00B1hh'
+  )
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = '13-05'
+    ),
+    'hh\u00B1hh'
   )
   
   expect_equal(
@@ -71,126 +170,280 @@ testthat::test_that('Test possible formats.', {
     'hh'
   )
   
-  # Add time zones ------------------------------------------------------------
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13:45:23+05'
-    ),
-    'YYYY-MM-DDThh:mm:ss+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13:45:23-05'
-    ),
-    'YYYY-MM-DDThh:mm:ss-hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13:45+05'
-    ),
-    'YYYY-MM-DDThh:mm+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13:45-05'
-    ),
-    'YYYY-MM-DDThh:mm-hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13+05'
-    ),
-    'YYYY-MM-DDThh+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '2012-05-01T13-05'
-    ),
-    'YYYY-MM-DDThh-hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13:45:13+05'
-    ),
-    'hh:mm:ss+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13:45:13-05'
-    ),
-    'hh:mm:ss-hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13:45+05'
-    ),
-    'hh:mm+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13:45-05'
-    ),
-    'hh:mm-hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13+05'
-    ),
-    'hh+hh'
-  )
-  
-  expect_equal(
-    iso8601_get_format_string(
-      x = '13-05'
-    ),
-    'hh-hh'
-  )
-
 })
-
-
-testthat::test_that('Assume all timezone offsets are identical', {
   
-  expect_equal(
-    suppressWarnings(iso8601_get_format_string(
-      x = c(
-        '2012-05-01T13:45:23-05',
-        NA_character_,
-        '2012-05-01T13:45:23-05'
-      )
-    )),
-    'YYYY-MM-DDThh:mm:ss-hh'
-  )
+# Multiple formats ------------------------------------------------------------
+
+testthat::test_that('Test multiple formats', {
+  
+  # date HMS & date HM w/time zone
   
   expect_warning(
     iso8601_get_format_string(
       x = c(
         '2012-05-01T13:45:23-05',
-        NA_character_,
+        '2012-05-01T13:45:23+05',
+        '2012-05-01T13:45+05',
         '2012-05-01T13:45:23+05'
       )
     )
   )
   
   expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01T13:45:23-05',
+          '2012-05-01T13:45:23+05',
+          '2012-05-01T13:45+05',
+          '2012-05-01T13:45:23+05'
+        )
+      )
+    ),
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  )
+  
+  # date HMS & date HM
+  
+  expect_warning(
     iso8601_get_format_string(
       x = c(
-        '2012-05-01T13:45:23+05',
+        '2012-05-01T13:45:23',
+        '2012-05-01T13:45',
+        '2012-05-01T13:45',
+        '2012-05-01T13'
+      )
+    )
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01T13:45:23',
+          '2012-05-01T13:45',
+          '2012-05-01T13:45',
+          '2012-05-01T13'
+        )
+      )
+    ),
+    'YYYY-MM-DDThh:mm'
+  )
+  
+  # date HMS permutations & date
+  
+  expect_equal(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01T13:45:23-05',
         '2012-05-01T13:45:23+05'
       )
     ),
-    'YYYY-MM-DDThh:mm:ss+hh'
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
   )
   
+  # date
+  
+  expect_warning(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01',
+        '2012-05-01',
+        '2012-05-01',
+        '2012'
+      )
+    )
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01',
+          '2012-05-01',
+          '2012-05-01',
+          '2012'
+        )
+      )
+    ),
+    'YYYY-MM-DD'
+  )
+  
+  # time
+  
+  expect_warning(
+    iso8601_get_format_string(
+      x = c(
+        '13:45:23',
+        '13:45',
+        '13',
+        '13'
+      )
+    )
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '13:45:23',
+          '13:45',
+          '13',
+          '13'
+        )
+      )
+    ),
+    'hh'
+  )
+
+})
+
+# Check format rules ----------------------------------------------------------
+
+testthat::test_that('Test format rules', {
+
+  # Valid format combinations
+  
+  expect_equal(
+    validate_format_rules(
+      x = c(
+        '2012-05-01',
+        '2012-05-01',
+        '2012-05-01'
+      )
+    ),
+    NULL
+  )
+  
+  expect_equal(
+    validate_format_rules(
+      x = c(
+        '2012-05-01',
+        '2012-05-01',
+        '2012'
+      )
+    ),
+    NULL
+  )
+  
+  expect_equal(
+    validate_format_rules(
+      x = c(
+        '2012-05-01T13',
+        '2012-05-01T13:45',
+        '2012-05-01T13:45:23',
+        '2012-05-01T13:45:23-05',
+        '2012-05-01T13:45:23+05'
+      )
+    ),
+    NULL
+  )
+  
+  expect_equal(
+    validate_format_rules(
+      x = c(
+        '13:45:23+05',
+        '13:45-05',
+        '13+05',
+        '13:45:23',
+        '13:45',
+        '13'
+      )
+    ),
+    NULL
+  )
+  
+  # Invalid format combinations
+  
+  expect_error(
+    validate_format_rules(
+      x = c(
+        '2012-05-01',
+        '2012-05-01',
+        '2012-05-01',
+        '13:45:23',
+        '13:45',
+        '13',
+        '13'
+      )
+    )
+  )
+  
+  expect_error(
+    validate_format_rules(
+      x = c(
+        '2012-05-01',
+        '2012-05-01T13:45',
+        '2012-05-01',
+        '13:45:23',
+        '13:45',
+        '13',
+        '13',
+        '2012',
+        '2012'
+      )
+    )
+  )
+  
+  expect_error(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01T13:45:23',
+        '2012-05-01T13:45',
+        '2012-05-01',
+        '2012-05-01'
+      )
+    )
+  )
+  
+  expect_error(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01T13:45:23',
+        '2012-05-01T13:45',
+        '2012-05-01',
+        '2012-05-01',
+        '2012-05-01'
+      )
+    )
+  )
+  
+  expect_error(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01',
+        '13:45:23',
+        '13:45',
+        '13',
+        '13'
+      )
+    )
+  )
+  
+  expect_error(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01',
+        '13:45:23',
+        '13:45',
+        '13',
+        '13'
+      )
+    )
+  )
+  
+  expect_error(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01',
+        '2012-05-01',
+        '2012-05-01',
+        '13:45:23',
+        '13:45',
+        '13',
+        '13'
+      )
+    )
+  )
+
 })
