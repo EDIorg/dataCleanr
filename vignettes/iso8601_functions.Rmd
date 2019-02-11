@@ -30,7 +30,7 @@ library(dataCleanr)
 
 `iso8601_convert` converts date and time strings to standard ISO 8601 formatted strings, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.
 
-`iso8601_convert` leverages the power of `lubridate::parse_date_time` to parse dates and times, then uses regular expressions on the user supplied `orders` argument to identify resolution of the input data, and then outputs the converted data in this same resolution. Most of the arguments available to `lubridate::parse_date_time` can be used with `iso8601_convert`.
+`iso8601_convert` leverages the power of `lubridate::parse_date_time` to parse dates and times, then uses regular expressions on the user supplied `orders` argument to identify resolution of the input data, and then output the converted data in the same resolution. Most of the arguments available to `lubridate::parse_date_time` can be used with `iso8601_convert`.
 
 A common data management issue is converting date and time data into a consistent format. The following example illustrates some issues encountered in this process and how to solve them with `iso8601_convert`.
 
