@@ -492,10 +492,10 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     )
   }
   
-  if (length(unique(x_formats)) > 1){
+  if (length(unique(x_formats[!is.na(x_formats)])) > 1){
     warning(
       paste0(
-        'Output data contains multiple levels of precision.',
+        'Converted data contains multiple levels of precision.',
         ' Use the argument "return.format = T" to see where.'
       )
     )
