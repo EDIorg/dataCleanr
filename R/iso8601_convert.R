@@ -496,7 +496,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     warning(
       paste0(
         'Output data contains multiple levels of precision.',
-        ' Use the argument "return.res = T" to see where.'
+        ' Use the argument "return.format = T" to see where.'
       )
     )
   }
