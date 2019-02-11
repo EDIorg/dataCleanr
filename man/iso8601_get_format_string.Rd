@@ -33,11 +33,6 @@ iso8601_get_format_string('2012-05-01T13')
 iso8601_get_format_string('2012-05-01T13:29:54+05')
 
 # Expect a warning when more than one format is present.
-iso8601_get_format_string(c('2012-05-01', '2012-05-02', '2012-05-03T13:45:30'))
-
-# Expect an error when a mix of datetime, date, or time data are present.
-iso8601_get_format_string(c('2012-05-01', '2012-05-03T13:45:30'))
-iso8601_get_format_string(c('2012-05-01', '13:45:30'))
-iso8601_get_format_string(c('2012-05-03T13:45:30', '13:45:30'))
+iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'))
 
 }
