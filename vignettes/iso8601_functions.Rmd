@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we've developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 into R as POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.
+Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we've developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 stringsinto POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.
 
 ```{r instload dataCleanr, message=FALSE, warning=FALSE}
 # Install and load dataCleanr
@@ -28,7 +28,7 @@ library(dataCleanr)
 
 ## Conversion
 
-`iso8601_convert` converts date and time character strings to the standard ISO 8601 format, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.
+`iso8601_convert` converts date and time strings to standard ISO 8601 formatted strings, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.
 
 `iso8601_convert` leverages the power of `lubridate::parse_date_time` to parse dates and times, then uses regular expressions on the user supplied `orders` argument to identify resolution of the input data, and then outputs the converted data in this same resolution. Most of the arguments available to `lubridate::parse_date_time` can be used with `iso8601_convert`.
 
@@ -53,13 +53,13 @@ Looks like the orders didn't fully describe the input data. NAs are returned whe
 
 x[is.na(x_cnv)]
 
-# There are two orders present in these data, 'mdy H' and 'dmy HM'. Try converting with an updated list of orders.
+# There are two additional orders present in these data, 'mdy H' and 'dmy HM'. Try converting with an updated list of orders.
 
 x_cnv <- iso8601_convert(x, orders = c('mdy H', 'mdy HM', 'dmy HM'))
 x_cnv
 ```
 
-Notice, all the dates and times were parsed and output in resolution of the input data. Suppose we want to force the output resolution to be equal across all records. To do this, set the orders to the same resolution and set the `truncated` argument to the number of missing formats.
+Notice, all the dates and times were parsed and output in resolution of the input data. Suppose we want to force the output resolution to be equal across all records. To do this, set the orders to the same resolution and set the `truncated` argument to the number of missing format characters.
 
 ```{r datetimes truncated, echo=TRUE, paged.print=TRUE}
 # Adjust arguments to output data in the same resolution.
@@ -84,10 +84,10 @@ Voila! Dates and times in an ISO 8601 standard format.
 
 Another common data management task is to identify and report the format string specifier (e.g. 'YYYY-MM-DD') for a vector of date and time data. While not particularly difficult to do, automating this task can improve workflow efficiency and accuracy. 
 
-`iso8601_get_format_string` uses regular expressions to parse input data and identify the format string(s) present in a set of ISO 8601 dates and times in the format output by `iso8601_convert`.
+`iso8601_get_format_string` uses regular expressions to parse input data and identify the most common format string present in a set of ISO 8601 dates and times in the format output by `iso8601_convert`.
 
 ```{r format string detection, echo=TRUE, paged.print=TRUE}
-# Get the format string of the processed date and time data
+# Get the format of the processed date and time data
 
 iso8601_get_format_string(x_cnv)
 
