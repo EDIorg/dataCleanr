@@ -32,7 +32,7 @@
 
 <meta property="og:title" content="Convert dates and times to ISO 8601 — iso8601_convert" />
 
-<meta property="og:description" content="Convert date and time character strings to the standard ISO 8601 format,
+<meta property="og:description" content="Convert date and time strings into standard ISO 8601 formatted strings,
    with output resolution matching inputs, and full support of timezone 
    offsets.   
 NOTE: This function does not convert to all ISO 8601 formats. Currently
@@ -124,7 +124,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
 
     <div class="ref-description">
     
-    <p>Convert date and time character strings to the standard ISO 8601 format,
+    <p>Convert date and time strings into standard ISO 8601 formatted strings,
    with output resolution matching inputs, and full support of timezone 
    offsets.</p>   
 <p>NOTE: This function does not convert to all ISO 8601 formats. Currently
@@ -142,7 +142,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>(character) A vector of dates and times.</p></td>
+      <td><p>(character) A vector of date and time, date, or time strings.</p></td>
     </tr>
     <tr>
       <th>orders</th>
@@ -225,7 +225,7 @@ behavior when rare patterns where not present in the training set.
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>(character) A vector of dates and times in the ISO 8601 standard in the 
-    resolution of the input date and time value. The ISO 8601 standard 
+    resolution of the input date and time strings. The ISO 8601 standard 
     format output by this function is a combination of calendar dates, 
     times, time zone offsets, and valid combinations of these.</p>
     
@@ -241,14 +241,11 @@ behavior when rare patterns where not present in the training set.
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># Convert dates and times of varying resolution</span>
-
    <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'y'</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some data failed to parse. Consider updating your list of orders.</span></div><div class='output co'>#&gt; [1] NA</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'01/05/2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'dmy'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'01-May-2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'dby'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'HMS'</span>)</div><div class='output co'>#&gt; [1] "13:29:54"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'HMS'</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>'-05'</span>)</div><div class='output co'>#&gt; [1] "13:29:54-05"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'20120501 132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'Ymd HMS'</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>'-05'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54-05"</div><div class='input'>
    <span class='co'># Variance of input format is supported as long as orders are defined.</span>
    <span class='co'># NOTE: Output resolution matches input resolution.</span>
-
    <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HM'</span>, <span class='st'>'dmy_H'</span>))</div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2012-05-01T13:29"    "2012-05-01T13"      </div><div class='input'>
    <span class='co'># Force output resolution to be the same</span>
-
    <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HMS'</span>, <span class='st'>'dmy_HMS'</span>), <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2005-12-20T01:13:29" "2012-05-01T13:00:00"</div><div class='input'>
 </div></pre>
   </div>
@@ -273,7 +270,7 @@ behavior when rare patterns where not present in the training set.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>

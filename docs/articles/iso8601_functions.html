@@ -80,7 +80,7 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-07</h4>
+            <h4 class="date">2019-02-10</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
@@ -89,7 +89,7 @@
 
     
     
-<p>Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we’ve developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 into R as POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.</p>
+<p>Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we’ve developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 stringsinto POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install and load dataCleanr</span>
 
 <span class="co"># devtools::install_github('EDIorg/dataCleanr')</span>
@@ -97,7 +97,7 @@
 <div id="conversion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#conversion" class="anchor"></a>Conversion</h2>
-<p><code>iso8601_convert</code> converts date and time character strings to the standard ISO 8601 format, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.</p>
+<p><code>iso8601_convert</code> converts date and time strings to standard ISO 8601 formatted strings, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.</p>
 <p><code>iso8601_convert</code> leverages the power of <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> to parse dates and times, then uses regular expressions on the user supplied <code>orders</code> argument to identify resolution of the input data, and then outputs the converted data in this same resolution. Most of the arguments available to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> can be used with <code>iso8601_convert</code>.</p>
 <p>A common data management issue is converting date and time data into a consistent format. The following example illustrates some issues encountered in this process and how to solve them with <code>iso8601_convert</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the example data and view the first few lines to identify datetime orders</span>
@@ -133,7 +133,7 @@ x[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/
 <span class="co">#&gt;  [9] "16/5/12 13:00" "16/5/12 14:00" "16/5/12 15:00" "16/5/12 16:00"</span>
 <span class="co">#&gt; [13] "16/5/12 17:00" "16/5/12 18:00" "16/5/12 19:00"</span>
 
-<span class="co"># There are two orders present in these data, 'mdy H' and 'dmy HM'. Try converting with an updated list of orders.</span>
+<span class="co"># There are two additional orders present in these data, 'mdy H' and 'dmy HM'. Try converting with an updated list of orders.</span>
 
 x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy H'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>))
 x_cnv
@@ -148,7 +148,7 @@ x_cnv
 <span class="co">#&gt; [25] "2012-05-16T13:00" "2012-05-16T14:00" "2012-05-16T15:00"</span>
 <span class="co">#&gt; [28] "2012-05-16T16:00" "2012-05-16T17:00" "2012-05-16T18:00"</span>
 <span class="co">#&gt; [31] "2012-05-16T19:00"</span></code></pre></div>
-<p>Notice, all the dates and times were parsed and output in resolution of the input data. Suppose we want to force the output resolution to be equal across all records. To do this, set the orders to the same resolution and set the <code>truncated</code> argument to the number of missing formats.</p>
+<p>Notice, all the dates and times were parsed and output in resolution of the input data. Suppose we want to force the output resolution to be equal across all records. To do this, set the orders to the same resolution and set the <code>truncated</code> argument to the number of missing format characters.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Adjust arguments to output data in the same resolution.</span>
 
 x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy HM'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>), <span class="dt">truncated =</span> <span class="dv">1</span>)
@@ -186,11 +186,11 @@ x_cnv
 <h2 class="hasAnchor">
 <a href="#get-the-datetime-format-string" class="anchor"></a>Get the datetime format string</h2>
 <p>Another common data management task is to identify and report the format string specifier (e.g. ‘YYYY-MM-DD’) for a vector of date and time data. While not particularly difficult to do, automating this task can improve workflow efficiency and accuracy.</p>
-<p><code>iso8601_get_format_string</code> uses regular expressions to parse input data and identify the format string(s) present in a set of ISO 8601 dates and times in the format output by <code>iso8601_convert</code>.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get the format string of the processed date and time data</span>
+<p><code>iso8601_get_format_string</code> uses regular expressions to parse input data and identify the most common format string present in a set of ISO 8601 dates and times in the format output by <code>iso8601_convert</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get the format of the processed date and time data</span>
 
 <span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_cnv)
-<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm-hh"</span>
+<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm±hh"</span>
 
 <span class="co"># If there were more than one date time format present, then the mode is returned with a warning message.</span>
 
@@ -210,12 +210,14 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 
 <span class="co"># Read data into R</span>
 x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_read.html">iso8601_read</a></span>(x_cnv)
+<span class="co">#&gt; Warning in onames$offset == as.numeric(tz): longer object length is not a</span>
+<span class="co">#&gt; multiple of shorter object length</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(x_pos)
-<span class="co">#&gt; $class</span>
-<span class="co">#&gt; [1] "POSIXct" "POSIXt" </span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; $tzone</span>
-<span class="co">#&gt; [1] "Etc/GMT-5"</span></code></pre></div>
+<span class="co">#&gt; [1] "Etc/GMT+5"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $class</span>
+<span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></code></pre></div>
 <p>Now that the data are in POSIX, the myriad of date and time functions of <code>lubridate</code> are available to you.</p>
 </div>
   </div>
@@ -240,7 +242,7 @@ x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso86
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>
