@@ -32,10 +32,6 @@ class(datetimes)
 
 # Read date time strings with specified time zone offset
 datetimes <- iso8601_read(c('2012-05-01T13:23:00-03', '2012-05-02T13:23:00-03'))
-class(datetimes)
-
-# Multiple time zone offsets are not supported
-datetimes <- iso8601_read(c('2012-05-01T13:23:00-03', '2012-05-02T13:23:00-05'))
- 
+class(datetimes)  
 
 }
