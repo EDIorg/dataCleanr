@@ -1,7 +1,7 @@
 #' Convert dates and times to ISO 8601
 #'
 #' @description
-#'    Convert date and time character strings to the standard ISO 8601 format,
+#'    Convert date and time strings into standard ISO 8601 formatted strings,
 #'    with output resolution matching inputs, and full support of timezone 
 #'    offsets. 
 #'    
@@ -22,7 +22,7 @@
 #'     train = TRUE, drop = FALSE)
 #'
 #' @param x
-#'     (character) A vector of dates and times.
+#'     (character) A vector of date and time, date, or time strings.
 #' @param orders
 #'     (character) \emph{From lubridate 1.7.4.90000 documentation:}
 #'     A vector of date-time formats. Each order string is a series 
@@ -92,13 +92,12 @@
 #'
 #' @return
 #'     (character) A vector of dates and times in the ISO 8601 standard in the 
-#'     resolution of the input date and time value. The ISO 8601 standard 
+#'     resolution of the input date and time strings. The ISO 8601 standard 
 #'     format output by this function is a combination of calendar dates, 
 #'     times, time zone offsets, and valid combinations of these.
 #'
 #' @examples 
 #'    # Convert dates and times of varying resolution
-#'    
 #'    iso8601_convert(x = '2012', orders = 'y')
 #'    iso8601_convert(x = '01/05/2012', orders = 'dmy')
 #'    iso8601_convert(x = '01-May-2012', orders = 'dby')
@@ -108,11 +107,9 @@
 #' 
 #'    # Variance of input format is supported as long as orders are defined.
 #'    # NOTE: Output resolution matches input resolution.
-#'    
 #'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
 #'    
 #'    # Force output resolution to be the same
-#'    
 #'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HMS', 'dmy_HMS'), truncated = 3)
 #'
 #' @export
@@ -126,10 +123,12 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   if (missing(x)){
     stop('Input argument "x" is missing!')
   }
+  
   if (!is.character(x)){
     warning('Input argument "x" is not of class "character"! Coercing to character.')
     x <- as.character(x)
   }
+  
   if (missing(orders)){
     stop('Intput argument "orders" is missing.')
   } else {
@@ -137,6 +136,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       stop('Input argument "orders" is not of class "character"!')
     }
   }
+  
   if (!is.null(tz)){
     if (!is.character(tz)){
       stop('Input argument "tz" is not of class "character"!')
@@ -160,6 +160,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -170,8 +171,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%H')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Resolution = HM -----------------------------------------------------------
@@ -182,6 +186,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -192,8 +197,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%H:%M')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Resolution = HMS ----------------------------------------------------------
@@ -204,6 +212,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -214,8 +223,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%H:%M:%S')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Resolution = date ---------------------------------------------------------
@@ -238,6 +250,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -248,8 +261,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%d')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Resolution = date H -------------------------------------------------------
@@ -272,6 +288,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -282,8 +299,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
 
   # Resolution = date HM ------------------------------------------------------
@@ -306,6 +326,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -316,8 +337,11 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M')[!is.na(output)]
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Resolution = date HMS -----------------------------------------------------
@@ -340,6 +364,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   )
   
   if (sum(use_i) > 0){
+    
     output <- suppressWarnings(
       lubridate::parse_date_time(
         x = x,
@@ -350,40 +375,77 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         drop = drop
       )
     )
+    
     if (stringr::str_detect(orders[use_i], '(OS|%OS)$')){
-      decsec <- as.character(max(nchar(unlist(stringr::str_extract_all(x, '\\.[:digit:]*$')))-1))
-      x_converted[!is.na(output)] <- format(output, paste0('%Y-%m-%dT%H:%M:%OS', decsec))[!is.na(output)]
+      
+      decsec <- as.character(
+        max(
+          nchar(
+            unlist(
+              stringr::str_extract_all(
+                x, 
+                '\\.[:digit:]*$'
+              )
+            )
+          )-1
+        )
+      )
+      
+      x_converted[!is.na(output)] <- format(
+        output, 
+        paste0(
+          '%Y-%m-%dT%H:%M:%OS', 
+          decsec
+        )
+      )[!is.na(output)]
+      
     } else {
-      x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M:%S')[!is.na(output)]
+      
+      x_converted[!is.na(output)] <- format(
+        output, 
+        '%Y-%m-%dT%H:%M:%S'
+      )[!is.na(output)]
+      
     }
+    
     x[!is.na(output)] <- NA
+    
   }
   
   # Add timezone offset -------------------------------------------------------
   
   if (!is.null(tz)){
+    
     hr <- sprintf('%02d', abs(as.numeric(tz)))
+    
     if ((as.numeric(tz) > 0)){
+      
       use_i <- is.na(x_converted)
+      
       x_converted <- paste0(
         x_converted, 
         paste0('+', hr)
       )
+      
       x_converted[use_i] <- NA_character_
+      
     } else if ((as.numeric(tz) < 0)){
+      
       use_i <- is.na(x_converted)
+      
       x_converted <- paste0(
         x_converted, 
         paste0('-', hr)
       )
+      
       x_converted[use_i] <- NA_character_
+      
     }
     
   }
   
   # Output --------------------------------------------------------------------
   
- 
   if (sum(is.na(x_converted)) > 0){
     warning(
       paste0(
