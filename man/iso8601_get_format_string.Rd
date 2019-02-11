@@ -2,27 +2,29 @@
 % Please edit documentation in R/iso8601_get_format_string.R
 \name{iso8601_get_format_string}
 \alias{iso8601_get_format_string}
-\title{Get the format string specifier of ISO 8601 strings}
+\title{Get the format used in a vector of ISO 8601 strings}
 \usage{
 iso8601_get_format_string(x)
 }
 \arguments{
-\item{x}{(character) A vector ISO 8601 dates and times created with 
-`dataCleanr::iso8601_convert`.}
+\item{x}{(character) A vector of ISO 8601 strings created with `iso8601_convert`.
+Vector contents must be one of dates and times, dates, or times. A mix 
+of more than one type is not supported.}
 }
 \value{
-(character) A date time format string representing user supplied ISO 
-    8601 data. If more than one date time format is present, then the mode
-    is returned along with a warning message.
+(character) The date time format representing user supplied ISO 8601 
+    data. If more than one date time format is present, then the mode
+    is returned along with a warning message. An error is issued when input 
+    data is a mix of datetime, date, or time data.
 }
 \description{
-Get the format string specifier (e.g. 'YYYY-MM-DD') from a set of ISO 
-    8601 dates and times in the format output by `iso8601_convert`.
+Get the format (e.g. 'YYYY-MM-DD') used in a vector of ISO 8601 strings.
+    Supported formats are output by `iso8601_convert`.
 }
 \details{
 `iso8601_get_format_string` uses regular expressions to parse input data 
-    and identify the format string(s) present in a set of ISO 8601 dates and 
-    times in the format output by `iso8601_convert`.
+    and identify the most common format present in a vector of ISO 8601 
+    strings.
 }
 \examples{
 # Get format strings
@@ -31,5 +33,6 @@ iso8601_get_format_string('2012-05-01T13')
 iso8601_get_format_string('2012-05-01T13:29:54+05')
 
 # Expect a warning when more than one format is present.
-iso8601_get_format_string(c('2012-05-01', '2012-05-02', '2012-05-03 13:45:30'))
+iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'))
+
 }

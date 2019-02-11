@@ -2,28 +2,28 @@
 % Please edit documentation in R/iso8601_read.R
 \name{iso8601_read}
 \alias{iso8601_read}
-\title{Read ISO 8601 formatted strings into POSIXct, POSIXt}
+\title{Read ISO 8601 strings into POSIXct, POSIXt}
 \usage{
 iso8601_read(x)
 }
 \arguments{
-\item{x}{(character) A vector of ISO 8601 date times created with 
-`dataCleanr::iso8601_convert`.}
+\item{x}{(character) A vector of ISO 8601 strings created with `iso8601_convert`.
+Vector contents must be one of dates and times, dates, or times. A mix 
+of more than one type is not supported. A mix of input precision is 
+supported for date and time data.}
 }
 \value{
-(POSIXct, POSIXt) representation of date times, unless the format
-    is 'YYYY', in which case integer class data is returned.
+(POSIXct, POSIXt) A vector of POSIXct POSIXt, unless the format is 
+    'YYYY', in which case integer class data is returned.
 }
 \description{
-Read ISO 8601 formatted dates and times into POSIXct, POSIXt.
+Read ISO 8601 strings into POSIXct, POSIXt.
 }
 \details{
-`iso8601_read` provides a lightweight option for reading ISO 8601 data 
-    in the POSIXct POXIXt class. This function uses regular expressions to 
-    extract the orders and time zone offset arguments and then passess the 
-    info to `lubridate::parse_date_time` for parsing. Use 
-    `lubridate::parse_date_time` for more options on handling time zone 
-    offsets and locales.
+`iso8601_read` provides a lightweight option for reading ISO 8601 
+    strings into the POSIXct POXIXt class. This function uses regular 
+    expressions to extract the orders and time zone offset arguments and 
+    passess this info to `lubridate::parse_date_time` for parsing.
 }
 \examples{
 # Read date time strings
@@ -32,7 +32,6 @@ class(datetimes)
 
 # Read date time strings with specified time zone offset
 datetimes <- iso8601_read(c('2012-05-01T13:23:00-03', '2012-05-02T13:23:00-03'))
-class(datetimes)
- 
+class(datetimes)  
 
 }
