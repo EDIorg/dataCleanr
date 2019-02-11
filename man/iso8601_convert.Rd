@@ -8,7 +8,7 @@ iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     train = TRUE, drop = FALSE)
 }
 \arguments{
-\item{x}{(character) A vector of dates and times.}
+\item{x}{(character) A vector of date and time, date, or time strings.}
 
 \item{orders}{(character) \emph{From lubridate 1.7.4.90000 documentation:}
  A vector of date-time formats. Each order string is a series 
@@ -78,12 +78,12 @@ behavior when rare patterns where not present in the training set.
 }
 \value{
 (character) A vector of dates and times in the ISO 8601 standard in the 
-    resolution of the input date and time value. The ISO 8601 standard 
+    resolution of the input date and time strings. The ISO 8601 standard 
     format output by this function is a combination of calendar dates, 
     times, time zone offsets, and valid combinations of these.
 }
 \description{
-Convert date and time character strings to the standard ISO 8601 format,
+Convert date and time strings into standard ISO 8601 formatted strings,
    with output resolution matching inputs, and full support of timezone 
    offsets. 
    
@@ -102,7 +102,6 @@ Convert date and time character strings to the standard ISO 8601 format,
 }
 \examples{
    # Convert dates and times of varying resolution
-   
    iso8601_convert(x = '2012', orders = 'y')
    iso8601_convert(x = '01/05/2012', orders = 'dmy')
    iso8601_convert(x = '01-May-2012', orders = 'dby')
@@ -112,11 +111,9 @@ Convert date and time character strings to the standard ISO 8601 format,
 
    # Variance of input format is supported as long as orders are defined.
    # NOTE: Output resolution matches input resolution.
-   
    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
    
    # Force output resolution to be the same
-   
    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HMS', 'dmy_HMS'), truncated = 3)
 
 }
