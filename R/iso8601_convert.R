@@ -158,9 +158,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   # Initialize output vector(s)
   
   x_converted <- rep(NA_character_, length(x))
-  
-  x_formats <- rep(NA_character_, length(x))
-  
+
   x_raw <- x
   
   # Resolution = H ------------------------------------------------------------
@@ -188,9 +186,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%H')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'H'
-    
+
   }
   
   # Resolution = HM -----------------------------------------------------------
@@ -216,9 +212,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%H:%M')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'HM'
-    
+
   }
   
   # Resolution = HMS ----------------------------------------------------------
@@ -244,9 +238,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%H:%M:%S')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'HMS'
-    
+
   }
   
   # Resolution = date ---------------------------------------------------------
@@ -284,9 +276,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%d')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'ymd'
-    
+
     if (!is.null(tz)){
       stop("Adding time zones to date only data is not supported.")
     }
@@ -328,9 +318,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'ymd H'
-    
+
   }
 
   # Resolution = date HM ------------------------------------------------------
@@ -368,9 +356,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_converted[!is.na(output)] <- format(output, '%Y-%m-%dT%H:%M')[!is.na(output)]
     
     x[!is.na(output)] <- NA
-    
-    x_formats[!is.na(output)] <- 'ymd HM'
-    
+
   }
   
   # Resolution = date HMS -----------------------------------------------------
@@ -428,17 +414,13 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
         )
       )[!is.na(output)]
       
-      x_formats[!is.na(output)] <- 'ymd HMOS'
-      
     } else {
       
       x_converted[!is.na(output)] <- format(
         output, 
         '%Y-%m-%dT%H:%M:%S'
       )[!is.na(output)]
-      
-      x_formats[!is.na(output)] <- 'ymd HMS'
-      
+
     }
     
     x[!is.na(output)] <- NA
@@ -475,10 +457,18 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       
     }
     
-    x_formats <- paste0(
-      x_formats,
-      'Z'
-    )
+  }
+  
+  # Get formats ---------------------------------------------------------------
+  
+  if (sum(is.na(x_converted)) != length(x_converted)){
+    
+    x_formats <- suppressWarnings(
+      iso8601_get_format_string(
+        x_converted,
+        return.format = T
+      )
+    )$format
     
   }
   
@@ -491,14 +481,18 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       )
     )
   }
-  
-  if (length(unique(x_formats[!is.na(x_formats)])) > 1){
-    warning(
-      paste0(
-        'Converted data contains multiple levels of precision.',
-        ' Use the argument "return.format = T" to see where.'
+
+  if (exists('x_formats')){
+    
+    if ((length(unique(x_formats[!is.na(x_formats)])) > 1) & (return.format == F)){
+      warning(
+        paste0(
+          'Converted data contains multiple levels of precision.',
+          ' Use the argument "return.format = T" to see where.'
+        )
       )
-    )
+    }
+     
   }
   
   if (isTRUE(return.format)){
