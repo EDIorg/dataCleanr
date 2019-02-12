@@ -80,7 +80,7 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-11</h4>
+            <h4 class="date">2019-02-12</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
@@ -89,7 +89,7 @@
 
     
     
-<p>Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we’ve developed functions for converting to a subset of ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 stringsinto POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.</p>
+<p>Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we’ve developed functions for converting to ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 strings into POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install and load dataCleanr</span>
 
 <span class="co"># devtools::install_github('EDIorg/dataCleanr')</span>
@@ -97,8 +97,8 @@
 <div id="conversion" class="section level2">
 <h2 class="hasAnchor">
 <a href="#conversion" class="anchor"></a>Conversion</h2>
-<p><code>iso8601_convert</code> converts date and time strings to standard ISO 8601 formatted strings, with the output resolution matching the input resolution, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.</p>
-<p><code>iso8601_convert</code> leverages the power of <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> to parse dates and times, then uses regular expressions on the user supplied <code>orders</code> argument to identify resolution of the input data, and then output the converted data in the same resolution. Most of the arguments available to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> can be used with <code>iso8601_convert</code>.</p>
+<p><code>iso8601_convert</code> converts date and time strings to standard ISO 8601 formatted strings, with the output temporal resolution matching the input, and full support of timezone offsets. This function does not convert to all ISO 8601 formats. Currently supported formats include calendar dates, times, time zones, and valid combinations of these. Week dates, ordinal dates, and time intervals are not yet supported.</p>
+<p><code>iso8601_convert</code> leverages the power of <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> to parse dates and times, then uses regular expressions on the <code>orders</code> argument to identify the temporal resolution of input data to output data accordingly. Most of the arguments available to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> can be used with <code>iso8601_convert</code>.</p>
 <p>A common data management issue is converting date and time data into a consistent format. The following example illustrates some issues encountered in this process and how to solve them with <code>iso8601_convert</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load the example data and view the first few lines to identify datetime orders</span>
 
@@ -112,9 +112,6 @@ x &lt;-<span class="st"> </span>data_iso8601<span class="op">$</span>datetime
 x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="st">'mdy HM'</span>)
 <span class="co">#&gt; Warning in iso8601_convert(x, orders = "mdy HM"): Some data failed to</span>
 <span class="co">#&gt; parse. Consider updating your list of orders.</span>
-<span class="co">#&gt; Warning in iso8601_convert(x, orders = "mdy HM"): Output data contains</span>
-<span class="co">#&gt; multiple levels of precision.Use the argument "return.res = T" to see</span>
-<span class="co">#&gt; where.</span>
 x_cnv
 <span class="co">#&gt;  [1] "2012-05-15T13:00" "2012-05-15T14:00" "2012-05-15T15:00"</span>
 <span class="co">#&gt;  [4] "2012-05-15T16:00" "2012-05-15T17:00" "2012-05-15T18:00"</span>
@@ -140,8 +137,8 @@ x[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/
 
 x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy H'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>))
 <span class="co">#&gt; Warning in iso8601_convert(x, orders = c("mdy H", "mdy HM", "dmy HM")):</span>
-<span class="co">#&gt; Output data contains multiple levels of precision.Use the argument</span>
-<span class="co">#&gt; "return.res = T" to see where.</span>
+<span class="co">#&gt; Converted data contains multiple levels of temporal resolution. Use the</span>
+<span class="co">#&gt; argument "return.format = T" to see where.</span>
 x_cnv
 <span class="co">#&gt;  [1] "2012-05-15T13:00" "2012-05-15T14:00" "2012-05-15T15:00"</span>
 <span class="co">#&gt;  [4] "2012-05-15T16:00" "2012-05-15T17:00" "2012-05-15T18:00"</span>
@@ -154,8 +151,56 @@ x_cnv
 <span class="co">#&gt; [25] "2012-05-16T13:00" "2012-05-16T14:00" "2012-05-16T15:00"</span>
 <span class="co">#&gt; [28] "2012-05-16T16:00" "2012-05-16T17:00" "2012-05-16T18:00"</span>
 <span class="co">#&gt; [31] "2012-05-16T19:00"</span></code></pre></div>
-<p>Notice, all the dates and times were parsed and output in resolution of the input data. Suppose we want to force the output resolution to be equal across all records. To do this, set the orders to the same resolution and set the <code>truncated</code> argument to the number of missing format characters.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Adjust arguments to output data in the same resolution.</span>
+<p>All the input data have been converted to ISO 8601 and the output contains multiple temporal resolutions (as indicated by the warning message). If we want to output a consistent resolution, we can use the <code>return.format</code> argument to see where the output resolution differs, and make the appropriate changes to <code>iso8601_convert</code>.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Return a data frame containing x, x_converted, and the format of x_converted. </span>
+
+x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy H'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>), <span class="dt">return.format =</span> T)
+x_cnv
+<span class="co">#&gt;                x      x_converted           format</span>
+<span class="co">#&gt; 1  5/15/12 13:00 2012-05-15T13:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 2  5/15/12 14:00 2012-05-15T14:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 3  5/15/12 15:00 2012-05-15T15:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 4  5/15/12 16:00 2012-05-15T16:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 5  5/15/12 17:00 2012-05-15T17:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 6  5/15/12 18:00 2012-05-15T18:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 7  5/15/12 19:00 2012-05-15T19:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 8  5/15/12 20:00 2012-05-15T20:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 9  5/15/12 21:00 2012-05-15T21:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 10 5/15/12 22:00 2012-05-15T22:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 11 5/15/12 23:00 2012-05-15T23:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 12  5/16/12 0:00 2012-05-16T00:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 13     5/16/12 1    2012-05-16T01    YYYY-MM-DDThh</span>
+<span class="co">#&gt; 14     5/16/12 2    2012-05-16T02    YYYY-MM-DDThh</span>
+<span class="co">#&gt; 15     5/16/12 3    2012-05-16T03    YYYY-MM-DDThh</span>
+<span class="co">#&gt; 16     5/16/12 4    2012-05-16T04    YYYY-MM-DDThh</span>
+<span class="co">#&gt; 17     5/16/12 5    2012-05-16T05    YYYY-MM-DDThh</span>
+<span class="co">#&gt; 18  5/16/12 6:00 2012-05-16T06:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 19  5/16/12 7:00 2012-05-16T07:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 20  5/16/12 8:00 2012-05-16T08:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 21  5/16/12 9:00 2012-05-16T09:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 22 16/5/12 10:00 2012-05-16T10:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 23 16/5/12 11:00 2012-05-16T11:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 24 16/5/12 12:00 2012-05-16T12:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 25 16/5/12 13:00 2012-05-16T13:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 26 16/5/12 14:00 2012-05-16T14:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 27 16/5/12 15:00 2012-05-16T15:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 28 16/5/12 16:00 2012-05-16T16:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 29 16/5/12 17:00 2012-05-16T17:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 30 16/5/12 18:00 2012-05-16T18:00 YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 31 16/5/12 19:00 2012-05-16T19:00 YYYY-MM-DDThh:mm</span>
+
+<span class="co"># Return unique formats</span>
+
+frmts &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unique">unique</a></span>(x_cnv<span class="op">$</span>format)
+frmts
+<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm" "YYYY-MM-DDThh"</span>
+
+<span class="co"># View input data corresponding to 'YYYY-MM-DDThh' outputs</span>
+
+x_cnv<span class="op">$</span>x[x_cnv<span class="op">$</span>format <span class="op">==</span><span class="st"> </span>frmts[<span class="dv">2</span>]]
+<span class="co">#&gt; [1] "5/16/12 1" "5/16/12 2" "5/16/12 3" "5/16/12 4" "5/16/12 5"</span>
+
+<span class="co"># To output data in the same temporal resolution change 'mdy H' to 'mdy HM' and set `truncated` to the number of format characters missing in the original data (i.e. 1).</span>
 
 x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy HM'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>), <span class="dt">truncated =</span> <span class="dv">1</span>)
 x_cnv
@@ -169,7 +214,9 @@ x_cnv
 <span class="co">#&gt; [22] "2012-05-16T10:00" "2012-05-16T11:00" "2012-05-16T12:00"</span>
 <span class="co">#&gt; [25] "2012-05-16T13:00" "2012-05-16T14:00" "2012-05-16T15:00"</span>
 <span class="co">#&gt; [28] "2012-05-16T16:00" "2012-05-16T17:00" "2012-05-16T18:00"</span>
-<span class="co">#&gt; [31] "2012-05-16T19:00"</span></code></pre></div>
+<span class="co">#&gt; [31] "2012-05-16T19:00"</span>
+
+<span class="co"># The output resolution is now consistent.</span></code></pre></div>
 <p>Time zone offsets are added as a two digit hour with a ‘+’ or ‘-’ with respect to UTC.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Add a time zone offset</span>
 
@@ -198,19 +245,35 @@ x_cnv
 <span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_cnv)
 <span class="co">#&gt; [1] "YYYY-MM-DDThh:mm±hh"</span>
 
-<span class="co"># If there were more than one date time format present, then the mode is returned with a warning message.</span>
+<span class="co"># If there were more than one date time formats present, then the mode is returned with a warning message.</span>
 
 x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'2012-05-15T13:45:00'</span>, <span class="st">'2012-06-15T13:45:00'</span>, <span class="st">'2012-07-15T13:45:00'</span>, <span class="st">'2012-08-15T13:45'</span>, <span class="st">'2012-09-15T13:45'</span>, <span class="st">'2012-10-15T13'</span>)
 
 <span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_different_formats)
 <span class="co">#&gt; Warning in iso8601_get_format_string(x_different_formats): More than one</span>
 <span class="co">#&gt; format was found. The returned value is the mode of the detected formats.</span>
-<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm:ss"</span></code></pre></div>
+<span class="co">#&gt; Use the argument "return.format = T" to see all detected fomats.</span>
+<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm:ss"</span>
+
+<span class="co"># Use the return.format argument to see where formats differ</span>
+
+<span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_different_formats, <span class="dt">return.format =</span> T)
+<span class="co">#&gt; Warning in iso8601_get_format_string(x_different_formats, return.format =</span>
+<span class="co">#&gt; T): More than one format was found. The returned value is the mode of the</span>
+<span class="co">#&gt; detected formats. Use the argument "return.format = T" to see all detected</span>
+<span class="co">#&gt; fomats.</span>
+<span class="co">#&gt;                     x              format</span>
+<span class="co">#&gt; 1 2012-05-15T13:45:00 YYYY-MM-DDThh:mm:ss</span>
+<span class="co">#&gt; 2 2012-06-15T13:45:00 YYYY-MM-DDThh:mm:ss</span>
+<span class="co">#&gt; 3 2012-07-15T13:45:00 YYYY-MM-DDThh:mm:ss</span>
+<span class="co">#&gt; 4    2012-08-15T13:45    YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 5    2012-09-15T13:45    YYYY-MM-DDThh:mm</span>
+<span class="co">#&gt; 6       2012-10-15T13       YYYY-MM-DDThh</span></code></pre></div>
 </div>
 <div id="reading-into-posixct-posixt" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-into-posixct-posixt" class="anchor"></a>Reading into POSIXct POSIXt</h2>
-<p><code>iso8601_read</code> provides a lightweight option for reading ISO 8601 data in the POSIXct POXIXt class. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code> for parsing.</p>
+<p><code>iso8601_read</code> provides a lightweight option for reading ISO 8601 data in the POSIXct POXIXt class. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read data into POSIXct POSIXt</span>
 
 <span class="co"># Read data into R</span>
