@@ -16,6 +16,10 @@ devtools::install_github("EDIorg/dataCleanr")
 
 Check out available functions and use cases at https://EDIorg.github.io/dataCleanr/
 
+## Roadmap
+
+`dataCleanr` focuses on user friendly high level functions for common data cleaning tasks in preparation for archive. Functionality should be accessible to R beginners.
+
 ## Contributing
 
 We welcome contributions of all forms including bug reports, requests for development, and new functionality. Please reference our [code conduct](https://github.com/EDIorg/dataCleanr/blob/master/CODE_OF_CONDUCT.md) and [contributing guidelines](https://github.com/EDIorg/dataCleanr/blob/master/CONTRIBUTING.md) for submitting pull requests.
