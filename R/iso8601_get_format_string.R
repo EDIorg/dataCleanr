@@ -68,8 +68,14 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'YYYY-MM-DDThh:mm:ss\u00B1hh'
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*\\+[:digit:]*$'
+      )] <- 'YYYY-MM-DDThh:mm:ss+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*\\-[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm:ss-hh'
   
   x_formats[
     stringr::str_detect(
@@ -149,6 +155,19 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       pattern = '^[:digit:]{2}$'
       )] <- 'hh'
 
+  # Add +- sign when both + and - time zone offsets are present ---------------
+  
+  if ((sum(stringr::str_detect(x_formats, pattern = '\\+hh$'), na.rm = T) > 0) &
+      (sum(stringr::str_detect(x_formats, pattern = '\\-hh$'), na.rm = T) > 0)){
+    
+    x_formats <- stringr::str_replace_all(
+      x_formats, 
+      pattern = '(\\+hh|\\-hh)$',
+      replacement = '\u00B1hh'
+    )
+    
+  }
+  
   # Return the mode of detected formats ---------------------------------------
   
   output <- Mode(x_formats)
@@ -156,7 +175,7 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
   # Issue warning when more than one mode exists
   
   if (length(unique(x_formats)) > 1){
-    warning('More than one format was found. The returned value is the mode of the detected formats.')
+    warning('More than one format was found. The returned value is the mode of the detected formats. Use the argument "return.format = T" to see all detected fomats.')
   }
 
   # Output --------------------------------------------------------------------

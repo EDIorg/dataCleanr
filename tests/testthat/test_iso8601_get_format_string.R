@@ -35,14 +35,14 @@ testthat::test_that('Test date HMS', {
     iso8601_get_format_string(
       x = '2012-05-01T13:45:23+05'
     ),
-    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+    'YYYY-MM-DDThh:mm:ss+hh'
   )
   
   expect_equal(
     iso8601_get_format_string(
       x = '2012-05-01T13:45:23-05'
     ),
-    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+    'YYYY-MM-DDThh:mm:ss-hh'
   )
 
   expect_equal(
@@ -51,7 +51,7 @@ testthat::test_that('Test date HMS', {
     ),
     'YYYY-MM-DDThh:mm:ss'
   )
-
+  
 })
 
 # date HM ---------------------------------------------------------------------
@@ -497,4 +497,67 @@ testthat::test_that('Test for output when return.format = T', {
   
 })
 
+# + and - time zone offsets present -------------------------------------------
 
+testthat::test_that('+ and - time zone offsets present', {
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01T13:45:23+05',
+          '2012-05-01T13:45:23+05',
+          '2012-05-01T13:45:23-05',
+          '2012-05-01T13:45:23'
+        )
+      )
+    ),
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '2012-05-01T13:45:23+05',
+          '13:45:23+05',
+          '2012-05-01T13:45:23-05',
+          '2012-05-01T13:45:23'
+        )
+      )
+    ),
+    'YYYY-MM-DDThh:mm:ss\u00B1hh'
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_get_format_string(
+        x = c(
+          '13:45:23+05',
+          '13:45:23+05',
+          '2012-05-01T13:45:23-05',
+          '2012-05-01T13:45:23'
+        )
+      )
+    ),
+    'hh:mm:ss\u00B1hh'
+  )
+  
+})
+
+
+# Use 
+
+expect_equal(
+  suppressWarnings(
+    iso8601_get_format_string(
+      x = c(
+        '2012-05-01T13:45:23+05',
+        '2012-05-01T13:45:23+05',
+        '2012-05-01T13:45:23-05',
+        '2012-05-01T13:45:23'
+      )
+    )
+  ),
+  'YYYY-MM-DDThh:mm:ss\u00B1hh'
+)

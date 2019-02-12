@@ -14,8 +14,8 @@
 #' @param x
 #'     (character) A vector of ISO 8601 strings created with `iso8601_convert`.
 #'     Vector contents must be one of dates and times, dates, or times. A mix 
-#'     of more than one type is not supported. A mix of input precision is 
-#'     supported for date and time data.
+#'     of more than one type is not supported. A mix of input temporal 
+#'     resolution is supported for date and time data.
 #'
 #' @return
 #'     (POSIXct, POSIXt) A vector of POSIXct POSIXt, unless the format is 

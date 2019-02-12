@@ -2,8 +2,8 @@
 #'
 #' @description
 #'    Convert date and time strings into standard ISO 8601 formatted strings,
-#'    with output resolution matching inputs, and full support of timezone 
-#'    offsets. 
+#'    with output temporal resolution matching inputs, and full support of 
+#'    timezone offsets. 
 #'    
 #'    NOTE: This function does not convert to all ISO 8601 formats. Currently
 #'    supported formats include calendar dates, times, time zones, and valid
@@ -12,8 +12,8 @@
 #'    
 #' @details
 #'    `iso8601_convert` leverages the power of `lubridate::parse_date_time` to 
-#'    parse dates and times, then uses regular expressions on the user supplied
-#'    `orders` argument to identify resolution of the input data, and then 
+#'    parse dates and times, then uses regular expressions on the `orders` 
+#'    argument to identify the temporal resolution of the input data, and then 
 #'    outputs the converted data in this same resolution. Most of the arguments
 #'    available to `lubridate::parse_date_time` can be used with 
 #'    `iso8601_convert`.
@@ -48,7 +48,7 @@
 #'         \item{OS} Fractional second.
 #'     }
 #' @param tz
-#'     (character) Time zone offset with respect to UTC (e.g. '+5', '-11'). 
+#'     (character) Time zone offset with respect to UTC (e.g. '+05', '-11'). 
 #'     NOTE: This argument is different than `tz` supplied to 
 #'     `lubridate::parse_date_time`.
 #' @param truncated
@@ -92,21 +92,21 @@
 #' @param return.format
 #'     (logical) Should format specifiers be returned with the output data? 
 #'     This argument supports identification of where differences in output
-#'     resolution/precision occur.
+#'     temporal resolution occur.
 #'
 #' @return
 #'     (character) A vector of dates and times in the ISO 8601 standard in the 
-#'     resolution of the input date and time strings. The ISO 8601 standard 
-#'     format output by this function is a combination of calendar dates, 
-#'     times, time zone offsets, and valid combinations of these.
+#'     temporal resolution of the input date and time strings. The ISO 8601 
+#'     standard format output by this function is a combination of calendar 
+#'     dates, times, time zone offsets, and valid combinations of these.
 #'     
 #'     (data frame) If `return.format` is `TRUE` then a data frame is returned
 #'     containing the input data, converted data, and formats of the converted 
 #'     data. This supports identification of where differences in output 
-#'     resolution/precision occur.
+#'     temporal resolution occur.
 #'
 #' @examples 
-#'    # Convert dates and times of varying resolution
+#'    # Convert dates and times of varying temporal resolution
 #'    iso8601_convert(x = '2012', orders = 'y')
 #'    iso8601_convert(x = '01/05/2012', orders = 'dmy')
 #'    iso8601_convert(x = '01-May-2012', orders = 'dby')
@@ -487,7 +487,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     if ((length(unique(x_formats[!is.na(x_formats)])) > 1) & (return.format == F)){
       warning(
         paste0(
-          'Converted data contains multiple levels of precision.',
+          'Converted data contains multiple levels of temporal resolution.',
           ' Use the argument "return.format = T" to see where.'
         )
       )
