@@ -5,7 +5,7 @@
 \title{Convert dates and times to ISO 8601}
 \usage{
 iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE, 
-    train = TRUE, drop = FALSE)
+    train = TRUE, drop = FALSE, return.format = FALSE)
 }
 \arguments{
 \item{x}{(character) A vector of date and time, date, or time strings.}
@@ -34,7 +34,7 @@ iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE,
      \item{OS} Fractional second.
  }}
 
-\item{tz}{(character) Time zone offset with respect to UTC (e.g. '+5', '-11'). 
+\item{tz}{(character) Time zone offset with respect to UTC (e.g. '+05', '-11'). 
 NOTE: This argument is different than `tz` supplied to 
 `lubridate::parse_date_time`.}
 
@@ -75,17 +75,26 @@ parameter was implicitly `TRUE`, which resulted in occasional surprising
 behavior when rare patterns where not present in the training set.
 \emph{The above definition was copied directly from lubridate 
 1.7.4.90000 documentation.}}
+
+\item{return.format}{(logical) Should format specifiers be returned with the output data? 
+This argument supports identification of where differences in output
+temporal resolution occur.}
 }
 \value{
 (character) A vector of dates and times in the ISO 8601 standard in the 
-    resolution of the input date and time strings. The ISO 8601 standard 
-    format output by this function is a combination of calendar dates, 
-    times, time zone offsets, and valid combinations of these.
+    temporal resolution of the input date and time strings. The ISO 8601 
+    standard format output by this function is a combination of calendar 
+    dates, times, time zone offsets, and valid combinations of these.
+    
+    (data frame) If `return.format` is `TRUE` then a data frame is returned
+    containing the input data, converted data, and formats of the converted 
+    data. This supports identification of where differences in output 
+    temporal resolution occur.
 }
 \description{
 Convert date and time strings into standard ISO 8601 formatted strings,
-   with output resolution matching inputs, and full support of timezone 
-   offsets. 
+   with output temporal resolution matching inputs, and full support of 
+   timezone offsets. 
    
    NOTE: This function does not convert to all ISO 8601 formats. Currently
    supported formats include calendar dates, times, time zones, and valid
@@ -94,14 +103,14 @@ Convert date and time strings into standard ISO 8601 formatted strings,
 }
 \details{
 `iso8601_convert` leverages the power of `lubridate::parse_date_time` to 
-   parse dates and times, then uses regular expressions on the user supplied
-   `orders` argument to identify resolution of the input data, and then 
+   parse dates and times, then uses regular expressions on the `orders` 
+   argument to identify the temporal resolution of the input data, and then 
    outputs the converted data in this same resolution. Most of the arguments
    available to `lubridate::parse_date_time` can be used with 
    `iso8601_convert`.
 }
 \examples{
-   # Convert dates and times of varying resolution
+   # Convert dates and times of varying temporal resolution
    iso8601_convert(x = '2012', orders = 'y')
    iso8601_convert(x = '01/05/2012', orders = 'dmy')
    iso8601_convert(x = '01-May-2012', orders = 'dby')
