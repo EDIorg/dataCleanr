@@ -21,9 +21,10 @@ Read ISO 8601 strings into POSIXct, POSIXt.
 }
 \details{
 `iso8601_read` provides a lightweight option for reading ISO 8601 
-    strings into the POSIXct POXIXt class. This function uses regular 
-    expressions to extract the orders and time zone offset arguments and 
-    passess this info to `lubridate::parse_date_time` for parsing.
+    strings created with `iso8601_convert` into the POSIXct POXIXt class. 
+    This function uses regular expressions to extract the orders and time 
+    zone offset arguments and passess this info to 
+    `lubridate::parse_date_time` for parsing.
 }
 \examples{
 # Read date time strings

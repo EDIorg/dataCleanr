@@ -80,7 +80,7 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-12</h4>
+            <h4 class="date">2019-02-14</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
@@ -273,7 +273,7 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 <div id="reading-into-posixct-posixt" class="section level2">
 <h2 class="hasAnchor">
 <a href="#reading-into-posixct-posixt" class="anchor"></a>Reading into POSIXct POSIXt</h2>
-<p><code>iso8601_read</code> provides a lightweight option for reading ISO 8601 data in the POSIXct POXIXt class. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code>.</p>
+<p><code>iso8601_read</code> provides a lightweight option for reading ISO 8601 data created with <code>iso8601_convert</code> into POSIXct POXIXt. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to <code><a href="http://lubridate.tidyverse.org/reference/parse_date_time.html">lubridate::parse_date_time</a></code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read data into POSIXct POSIXt</span>
 
 <span class="co"># Read data into R</span>

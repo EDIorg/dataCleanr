@@ -121,7 +121,7 @@ iso8601_get_format_string(x_different_formats, return.format = T)
 
 ## Reading into POSIXct POSIXt
 
-`iso8601_read` provides a lightweight option for reading ISO 8601 data in the POSIXct POXIXt class. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to `lubridate::parse_date_time`.
+`iso8601_read` provides a lightweight option for reading ISO 8601 data created with `iso8601_convert` into POSIXct POXIXt. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to `lubridate::parse_date_time`.
 
 ```{r read, echo=TRUE, paged.print=TRUE}
 # Read data into POSIXct POSIXt
