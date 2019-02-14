@@ -22,7 +22,7 @@ Check out available functions and use cases at https://EDIorg.github.io/dataClea
 
 ## Contributing
 
-We welcome contributions of all forms including bug reports, requests for development, and new functionality. Please reference our [code conduct](https://github.com/EDIorg/dataCleanr/blob/master/CODE_OF_CONDUCT.md) and [contributing guidelines](https://github.com/EDIorg/dataCleanr/blob/master/CONTRIBUTING.md) for submitting pull requests.
+We welcome contributions of all forms including bug reports, feature requests, and new functionality. Please reference our [code conduct](https://github.com/EDIorg/dataCleanr/blob/master/CODE_OF_CONDUCT.md) and [contributing guidelines](https://github.com/EDIorg/dataCleanr/blob/master/CONTRIBUTING.md) for submitting pull requests.
 
 ## Testing
 
