@@ -46,7 +46,7 @@ iso8601_get_format_string('2012-05-01T13:29:54+05')
 iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'))
 
 # return.format = T returns the input data, converted data, and formats
-iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'), return.format = T)
+iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'), return.format = TRUE)
 
 # Plus and minus sign is returned when more than one time zone sign is present
 iso8601_get_format_string(x = c('2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23-05:00'))
