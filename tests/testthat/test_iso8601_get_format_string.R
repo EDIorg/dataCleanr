@@ -604,7 +604,7 @@ testthat::test_that('Test for output when return.format = T', {
           '2012-05-01',
           '2012-05-01'
         ),
-        return.format = T
+        return.format = TRUE
       )
     ),
     list(

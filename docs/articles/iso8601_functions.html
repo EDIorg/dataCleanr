@@ -80,7 +80,7 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-14</h4>
+            <h4 class="date">2019-02-18</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
@@ -154,7 +154,7 @@ x_cnv
 <p>All the input data have been converted to ISO 8601 and the output contains multiple temporal resolutions (as indicated by the warning message). If we want to output a consistent resolution, we can use the <code>return.format</code> argument to see where the output resolution differs, and make the appropriate changes to <code>iso8601_convert</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Return a data frame containing x, x_converted, and the format of x_converted. </span>
 
-x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy H'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>), <span class="dt">return.format =</span> T)
+x_cnv &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_convert.html">iso8601_convert</a></span>(x, <span class="dt">orders =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">'mdy H'</span>, <span class="st">'mdy HM'</span>, <span class="st">'dmy HM'</span>), <span class="dt">return.format =</span> <span class="ot">TRUE</span>)
 x_cnv
 <span class="co">#&gt;                x      x_converted           format</span>
 <span class="co">#&gt; 1  5/15/12 13:00 2012-05-15T13:00 YYYY-MM-DDThh:mm</span>
@@ -243,7 +243,7 @@ x_cnv
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Get the format of the processed date and time data</span>
 
 <span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_cnv)
-<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm±hh"</span>
+<span class="co">#&gt; [1] "YYYY-MM-DDThh:mm-hh"</span>
 
 <span class="co"># If there were more than one date time formats present, then the mode is returned with a warning message.</span>
 
@@ -257,11 +257,11 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 
 <span class="co"># Use the return.format argument to see where formats differ</span>
 
-<span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_different_formats, <span class="dt">return.format =</span> T)
-<span class="co">#&gt; Warning in iso8601_get_format_string(x_different_formats, return.format =</span>
-<span class="co">#&gt; T): More than one format was found. The returned value is the mode of the</span>
-<span class="co">#&gt; detected formats. Use the argument "return.format = T" to see all detected</span>
-<span class="co">#&gt; fomats.</span>
+<span class="kw"><a href="../reference/iso8601_get_format_string.html">iso8601_get_format_string</a></span>(x_different_formats, <span class="dt">return.format =</span> <span class="ot">TRUE</span>)
+<span class="co">#&gt; Warning in iso8601_get_format_string(x_different_formats, return.format</span>
+<span class="co">#&gt; = TRUE): More than one format was found. The returned value is the mode</span>
+<span class="co">#&gt; of the detected formats. Use the argument "return.format = T" to see all</span>
+<span class="co">#&gt; detected fomats.</span>
 <span class="co">#&gt;                     x              format</span>
 <span class="co">#&gt; 1 2012-05-15T13:45:00 YYYY-MM-DDThh:mm:ss</span>
 <span class="co">#&gt; 2 2012-06-15T13:45:00 YYYY-MM-DDThh:mm:ss</span>
@@ -279,11 +279,11 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 <span class="co"># Read data into R</span>
 x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_read.html">iso8601_read</a></span>(x_cnv)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(x_pos)
-<span class="co">#&gt; $class</span>
-<span class="co">#&gt; [1] "POSIXct" "POSIXt" </span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; $tzone</span>
-<span class="co">#&gt; [1] "Etc/GMT+5"</span></code></pre></div>
+<span class="co">#&gt; [1] "Etc/GMT+5"</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $class</span>
+<span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></code></pre></div>
 <p>Now that the data are in POSIX, the myriad of date and time functions of <code>lubridate</code> are available to you.</p>
 </div>
   </div>
@@ -308,7 +308,7 @@ x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso86
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

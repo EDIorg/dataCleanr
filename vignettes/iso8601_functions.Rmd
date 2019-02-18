@@ -64,7 +64,7 @@ All the input data have been converted to ISO 8601 and the output contains multi
 ```{r report formats, echo=TRUE, paged.print=TRUE}
 # Return a data frame containing x, x_converted, and the format of x_converted. 
 
-x_cnv <- iso8601_convert(x, orders = c('mdy H', 'mdy HM', 'dmy HM'), return.format = T)
+x_cnv <- iso8601_convert(x, orders = c('mdy H', 'mdy HM', 'dmy HM'), return.format = TRUE)
 x_cnv
 
 # Return unique formats
@@ -115,7 +115,7 @@ iso8601_get_format_string(x_different_formats)
 
 # Use the return.format argument to see where formats differ
 
-iso8601_get_format_string(x_different_formats, return.format = T)
+iso8601_get_format_string(x_different_formats, return.format = TRUE)
 
 ```
 

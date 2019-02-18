@@ -452,7 +452,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
     x_formats <- suppressWarnings(
       iso8601_get_format_string(
         x_converted,
-        return.format = T
+        return.format = TRUE
       )
     )$format
     

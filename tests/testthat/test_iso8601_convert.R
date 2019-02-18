@@ -823,7 +823,7 @@ testthat::test_that('return.format = T outputs a data frame', {
       iso8601_convert(
         x = data_iso8601$date_2_formats,
         orders = c('mdy', 'dmy'),
-        return.format = T
+        return.format = TRUE
       )
     ), 
     'data.frame'
@@ -834,7 +834,7 @@ testthat::test_that('return.format = T outputs a data frame', {
       iso8601_convert(
         x = data_iso8601$date_2_formats,
         orders = c('mdy', 'dmy'),
-        return.format = T
+        return.format = TRUE
       )
     ), 
     'data.frame'
