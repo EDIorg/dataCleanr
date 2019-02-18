@@ -34,7 +34,10 @@ iso8601_convert(x, orders, tz = NULL, truncated = 0, exact = FALSE,
      \item{OS} Fractional second.
  }}
 
-\item{tz}{(character) Time zone offset with respect to UTC (e.g. '+05', '-11'). 
+\item{tz}{(character) Time zone offset with respect to UTC. Acceptable formats
+are: +hh, -hh, +hh:mm, -hh:mm. Use "Z" to denote UTC. If an invalid time
+zone is entered, then an error is returned. Acceptable time zone offsets
+are listed here \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}.
 NOTE: This argument is different than `tz` supplied to 
 `lubridate::parse_date_time`.}
 
@@ -118,11 +121,16 @@ Convert date and time strings into standard ISO 8601 formatted strings,
    iso8601_convert(x = '132954', orders = 'HMS', tz = '-05')
    iso8601_convert(x = '20120501 132954', orders = 'Ymd HMS', tz = '-05')
 
-   # Variance of input format is supported as long as orders are defined.
+   # Some variation of input format is supported as long as orders are defined.
    # NOTE: Output resolution matches input resolution.
    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
    
    # Force output resolution to be the same
    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HMS', 'dmy_HMS'), truncated = 3)
+   
+   \dontrun{
+   # Invalid time zones result in an error
+   iso8601_convert(x = '2012-05-01 13:29', orders = 'ymd HM', tz = '+18')
+   }
 
 }

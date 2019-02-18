@@ -32,12 +32,20 @@
 #'
 #' @examples 
 #' # Get format strings
+#' iso8601_get_format_string('13:45')
+#' iso8601_get_format_string('13:45:12+06:00')
 #' iso8601_get_format_string('2012-05-01')
 #' iso8601_get_format_string('2012-05-01T13')
 #' iso8601_get_format_string('2012-05-01T13:29:54+05')
 #' 
 #' # Expect a warning when more than one format is present.
 #' iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'))
+#' 
+#' # return.format = T returns the input data, converted data, and formats
+#' iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'), return.format = T)
+#' 
+#' # Plus and minus sign is returned when more than one time zone sign is present
+#' iso8601_get_format_string(x = c('2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23-05:00'))
 #' 
 #' @export
 #'
@@ -68,6 +76,18 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
   x_formats[
     stringr::str_detect(
       x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*\\+[:digit:]*:[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm:ss+hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*\\-[:digit:]*:[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm:ss-hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
       pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*\\+[:digit:]*$'
       )] <- 'YYYY-MM-DDThh:mm:ss+hh'
   
@@ -83,23 +103,59 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*:[:digit:]*$'
       )] <- 'YYYY-MM-DDThh:mm:ss'
   
+  # x_formats[
+  #   stringr::str_detect(
+  #     x, 
+  #     pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+  #     )] <- 'YYYY-MM-DDThh:mm\u00B1hh'
+
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'YYYY-MM-DDThh:mm\u00B1hh'
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*\\+[:digit:]*:[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm+hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*\\-[:digit:]*:[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm-hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*\\+[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*\\-[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh:mm-hh'
   
   x_formats[
     stringr::str_detect(
       x, 
       pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*:[:digit:]*$'
-      )] <- 'YYYY-MM-DDThh:mm'
+    )] <- 'YYYY-MM-DDThh:mm'
+  
+  # x_formats[
+  #   stringr::str_detect(
+  #     x, 
+  #     pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*(\\+|\\-)[:digit:]*$'
+  #     )] <- 'YYYY-MM-DDThh\u00B1hh'
   
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'YYYY-MM-DDThh\u00B1hh'
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*\\+[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '[:digit:]*-[:digit:]*-[:digit:]*T[:digit:]*\\-[:digit:]*$'
+    )] <- 'YYYY-MM-DDThh-hh'
   
   x_formats[
     stringr::str_detect(
@@ -119,11 +175,35 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       pattern = '^[:digit:]{4}$'
       )] <- 'YYYY'
   
+  # x_formats[
+  #   stringr::str_detect(
+  #     x, 
+  #     pattern = '^[:digit:]*:[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+  #     )] <- 'hh:mm:ss\u00B1hh'
+  
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'hh:mm:ss\u00B1hh'
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*\\+[:digit:]*:[:digit:]*$'
+    )] <- 'hh:mm:ss+hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*\\-[:digit:]*:[:digit:]*$'
+    )] <- 'hh:mm:ss-hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*\\+[:digit:]*$'
+    )] <- 'hh:mm:ss+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*:[:digit:]*\\-[:digit:]*$'
+    )] <- 'hh:mm:ss-hh'
   
   x_formats[
     stringr::str_detect(
@@ -131,11 +211,37 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       pattern = '^[:digit:]*:[:digit:]*:[:digit:]*$'
       )] <- 'hh:mm:ss'
   
+  #
+  
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '^[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'hh:mm\u00B1hh'
+      pattern = '^[:digit:]*:[:digit:]*\\+[:digit:]*:[:digit:]*$'
+    )] <- 'hh:mm+hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*\\-[:digit:]*:[:digit:]*$'
+    )] <- 'hh:mm-hh:mm'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*\\+[:digit:]*$'
+    )] <- 'hh:mm+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*:[:digit:]*\\-[:digit:]*$'
+    )] <- 'hh:mm-hh'
+  
+  # x_formats[
+  #   stringr::str_detect(
+  #     x, 
+  #     pattern = '^[:digit:]*:[:digit:]*(\\+|\\-)[:digit:]*$'
+  #     )] <- 'hh:mm\u00B1hh'
   
   x_formats[
     stringr::str_detect(
@@ -143,11 +249,23 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       pattern = '^[:digit:]*:[:digit:]*$'
       )] <- 'hh:mm'
   
+  # x_formats[
+  #   stringr::str_detect(
+  #     x, 
+  #     pattern = '^[:digit:]*(\\+|\\-)[:digit:]*$'
+  #     )] <- 'hh\u00B1hh'
+  
   x_formats[
     stringr::str_detect(
       x, 
-      pattern = '^[:digit:]*(\\+|\\-)[:digit:]*$'
-      )] <- 'hh\u00B1hh'
+      pattern = '^[:digit:]*\\+[:digit:]*$'
+    )] <- 'hh+hh'
+  
+  x_formats[
+    stringr::str_detect(
+      x, 
+      pattern = '^[:digit:]*\\-[:digit:]*$'
+    )] <- 'hh-hh'
   
   x_formats[
     stringr::str_detect(
@@ -164,6 +282,15 @@ iso8601_get_format_string <- function(x, return.format = FALSE){
       x_formats, 
       pattern = '(\\+hh|\\-hh)$',
       replacement = '\u00B1hh'
+    )
+    
+  } else if ((sum(stringr::str_detect(x_formats, pattern = '\\+hh:mm$'), na.rm = T) > 0) &
+             (sum(stringr::str_detect(x_formats, pattern = '\\-hh:mm$'), na.rm = T) > 0)){
+    
+    x_formats <- stringr::str_replace_all(
+      x_formats, 
+      pattern = '(\\+hh:mm|\\-hh:mm)$',
+      replacement = '\u00B1hh:mm'
     )
     
   }

@@ -6,14 +6,33 @@ library(dataCleanr)
 
 testthat::test_that('Read possible formats', {
 
-  expect_equal(
+  expect_error(
     iso8601_read(
       x = c(
         '2012-05-01T13:45:23-00',
         NA_character_
       )
+    )
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01T13:45:23-05:00',
+        NA_character_
+      )
     ),
-    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-0')
+    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT+5')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = c(
+        '2012-05-01T13:45:23+05:00',
+        NA_character_
+      )
+    ),
+    as.POSIXct('2012-05-01 13:45:23', tz = 'Etc/GMT-5')
   )
   
   expect_equal(
@@ -87,8 +106,6 @@ testthat::test_that('Read possible formats', {
   )
 
 })
-
-
 
 # date HMS --------------------------------------------------------------------
 
@@ -320,3 +337,66 @@ testthat::test_that('Test multiple formats', {
   
 })
 
+# Default to UTC --------------------------------------------------------------
+
+testthat::test_that('Default to UTC when no time zone is specified', {
+  
+  expect_equal(
+    suppressMessages(
+      iso8601_read(
+        x = '2012-05-01T13:45'
+      )
+    ),
+    as.POSIXct('2012-05-01 13:45', tz = 'UTC')
+  )
+  
+  expect_message(
+    iso8601_read(
+      x = '2012-05-01T13:45'
+    )
+  )
+  
+})
+
+# Support override of detected tz ---------------------------------------------
+
+testthat::test_that('Support override of detected tz', {
+  
+  expect_warning(
+    iso8601_read(
+      x = '2012-05-01T13:45+09:30'
+    )
+  )
+  
+  expect_equal(
+    suppressWarnings(
+      iso8601_read(
+        x = '2012-05-01T13:45+09:30'
+      )
+    ),
+    as.POSIXct('2012-05-01 13:45', tz = 'UTC')
+  )
+  
+  expect_equal(
+    iso8601_read(
+      x = '2012-05-01T13:45+09:30',
+      tz.name = 'Etc/GMT+4'
+    ),
+    as.POSIXct('2012-05-01 13:45', tz = 'Etc/GMT+4')
+  )
+  
+  expect_message(
+    iso8601_read(
+      x = '2012-05-01T13:45+09:30',
+      tz.name = 'Etc/GMT+4'
+    )
+  )
+  
+  expect_error(
+    iso8601_read(
+      x = '2012-05-01T13:45+09:30',
+      tz.name = 'Etc/GMT+44'
+    )
+  )
+
+})

@@ -184,6 +184,42 @@ testthat::test_that('Time zone offset should be present and formatted correctly'
     )
   )
   
+  expect_equal(
+    iso8601_convert(
+      x = c(
+        '2012-05-01 13:34',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34'
+      ),
+      orders = 'ymd HM',
+      tz = 'Z'
+    ),
+    c(
+      '2012-05-01T13:34Z',
+      '2012-05-01T13:34Z',
+      '2012-05-01T13:34Z'
+    )
+  )
+  
+  expect_equal(
+    iso8601_convert(
+      x = c(
+        '2012-05-01 13:34',
+        '2012-05-01 13:34',
+        '2012-05-01 13:34'
+      ),
+      orders = 'ymd HM',
+      tz = '+10:00'
+    ),
+    c(
+      '2012-05-01T13:34+10:00',
+      '2012-05-01T13:34+10:00',
+      '2012-05-01T13:34+10:00'
+    )
+  )
+  
+  
+  
 })
 
 # ymd -------------------------------------------------------------------------
@@ -792,6 +828,17 @@ testthat::test_that('return.format = T outputs a data frame', {
     ), 
     'data.frame'
   )
+  
+  expect_equal(
+    class(
+      iso8601_convert(
+        x = data_iso8601$date_2_formats,
+        orders = c('mdy', 'dmy'),
+        return.format = T
+      )
+    ), 
+    'data.frame'
+  )
 
 })
 
@@ -819,8 +866,76 @@ testthat::test_that('return.format = T outputs a data frame', {
       orders = c('HMS', 'HM', 'H')
     )
   )
+
+})
+
+# Validate time zone offset ---------------------------------------------------
+
+testthat::test_that('Validate tz', {
   
+  expect_equal(
+    validate_tz('Z'),
+    'Z'
+  )
   
+  expect_equal(
+    validate_tz('-5'),
+    '-05'
+  )
   
+  expect_equal(
+    validate_tz('-05'),
+    '-05'
+  )
+  
+  expect_equal(
+    validate_tz('-05:00'),
+    '-05:00'
+  )
+  
+  expect_error(
+    suppressWarnings(
+      validate_tz('-05:55')
+    )
+  )
+  
+  expect_error(
+    validate_tz('-05:55')
+  )
+  
+  expect_equal(
+    validate_tz('+10'),
+    '+10'
+  )
+  
+  expect_equal(
+    validate_tz('+10:00'),
+    '+10:00'
+  )
+  
+  expect_error(
+    validate_tz('+19:00')
+  )
+  
+  expect_error(
+    validate_tz('06:00')
+  )
+
+})
+
+
+# Invalid time zones are not used ---------------------------------------------
+
+testthat::test_that('Invalid time zones result in error', {
+  
+  expect_error(
+    iso8601_convert(
+      x = '2012-05-01 13:45',
+      orders = 'ymd HM',
+      tz = '+18'
+    )
+  )
   
 })
+
+

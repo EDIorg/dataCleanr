@@ -36,11 +36,19 @@ Get the format (e.g. 'YYYY-MM-DD') used in a vector of ISO 8601 strings.
 }
 \examples{
 # Get format strings
+iso8601_get_format_string('13:45')
+iso8601_get_format_string('13:45:12+06:00')
 iso8601_get_format_string('2012-05-01')
 iso8601_get_format_string('2012-05-01T13')
 iso8601_get_format_string('2012-05-01T13:29:54+05')
 
 # Expect a warning when more than one format is present.
 iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'))
+
+# return.format = T returns the input data, converted data, and formats
+iso8601_get_format_string(c('2012-05-01T13:45', '2012-05-02T13', '2012-05-03T13:45:30'), return.format = T)
+
+# Plus and minus sign is returned when more than one time zone sign is present
+iso8601_get_format_string(x = c('2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23+05:00', '2012-05-01T13:45:23-05:00'))
 
 }

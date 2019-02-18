@@ -48,7 +48,10 @@
 #'         \item{OS} Fractional second.
 #'     }
 #' @param tz
-#'     (character) Time zone offset with respect to UTC (e.g. '+05', '-11'). 
+#'     (character) Time zone offset with respect to UTC. Acceptable formats
+#'     are: +hh, -hh, +hh:mm, -hh:mm. Use "Z" to denote UTC. If an invalid time
+#'     zone is entered, then an error is returned. Acceptable time zone offsets
+#'     are listed here \url{https://en.wikipedia.org/wiki/List_of_tz_database_time_zones}.
 #'     NOTE: This argument is different than `tz` supplied to 
 #'     `lubridate::parse_date_time`.
 #' @param truncated
@@ -114,12 +117,17 @@
 #'    iso8601_convert(x = '132954', orders = 'HMS', tz = '-05')
 #'    iso8601_convert(x = '20120501 132954', orders = 'Ymd HMS', tz = '-05')
 #' 
-#'    # Variance of input format is supported as long as orders are defined.
+#'    # Some variation of input format is supported as long as orders are defined.
 #'    # NOTE: Output resolution matches input resolution.
 #'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HM', 'dmy_H'))
 #'    
 #'    # Force output resolution to be the same
 #'    iso8601_convert(x = c('2012-05-01 13:29:54', '2012-05-01 13:29', '1/5/2012 13'), orders = c('ymd_HMS', 'ymd_HMS', 'dmy_HMS'), truncated = 3)
+#'    
+#'    \dontrun{
+#'    # Invalid time zones result in an error
+#'    iso8601_convert(x = '2012-05-01 13:29', orders = 'ymd HM', tz = '+18')
+#'    }
 #'
 #' @export
 #'
@@ -147,12 +155,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   }
   
   if (!is.null(tz)){
-    if (!is.character(tz)){
-      stop('Input argument "tz" is not of class "character"!')
-    }
-    if (!isTRUE(stringr::str_detect(tz, '\\+')) & !isTRUE(stringr::str_detect(tz, '\\-'))){
-      stop('Missing "+" or "-" from input argument "tz".')
-    }
+    tz <- validate_tz(tz)
   }
 
   # Initialize output vector(s)
@@ -428,35 +431,18 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   }
   
   # Add timezone offset -------------------------------------------------------
-  
+
   if (!is.null(tz)){
+
+    use_i <- is.na(x_converted)
     
-    hr <- sprintf('%02d', abs(as.numeric(tz)))
+    x_converted <- paste0(
+      x_converted, 
+      tz
+    )
     
-    if ((as.numeric(tz) > 0)){
-      
-      use_i <- is.na(x_converted)
-      
-      x_converted <- paste0(
-        x_converted, 
-        paste0('+', hr)
-      )
-      
-      x_converted[use_i] <- NA_character_
-      
-    } else if ((as.numeric(tz) < 0)){
-      
-      use_i <- is.na(x_converted)
-      
-      x_converted <- paste0(
-        x_converted, 
-        paste0('-', hr)
-      )
-      
-      x_converted[use_i] <- NA_character_
-      
-    }
-    
+    x_converted[use_i] <- NA_character_
+
   }
   
   # Get formats ---------------------------------------------------------------
@@ -513,3 +499,137 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
   }
   
 }
+
+
+
+
+
+
+# A helper function to validate the argument "tz", and to output the correct
+# format.
+#
+# Input:
+# tz = time zone offset from UTC
+# 
+# Output:
+# Valid format for "tz" and ...
+# a warning message if "tz" can't be found in the list of supported offsets.
+
+validate_tz <- function(tz){
+  
+  # Check argument
+  
+  if (!is.null(tz)){
+    if (!is.character(tz)){
+      stop('Input argument "tz" is not of class "character"!')
+    }
+    if (length(tz) > 1){
+      stop('Only one input is allowed for "tz"')
+    }
+  }
+  
+  # Load supported time zones
+  
+  onames <- utils::read.table(
+    system.file('time_zones.txt', package = 'dataCleanr'),
+    sep = '\t', 
+    header = TRUE, 
+    as.is = TRUE
+  )
+  
+  # Parse input
+  
+  if (tz == 'Z'){
+    
+    output <- 'Z'
+    
+  } else {
+    
+    if (!isTRUE(stringr::str_detect(tz, '^(\\+|\\-)'))){
+      stop('Input argument "tz" must have a "+" or "-" sign.')
+    }
+    
+    if (stringr::str_count(tz, ':') == 1){
+      
+      hr <- as.numeric(
+        stringr::str_extract(
+          tz, 
+          '^(\\+|\\-)[:digit:]*'
+        )
+      )
+      
+      if (hr > 0){
+        
+        hr <- paste0(
+          '+', 
+          sprintf('%02d', abs(as.numeric(hr)))
+        )
+        
+      } else if (hr < 0){
+        
+        hr <- paste0(
+          '-', 
+          sprintf('%02d', abs(as.numeric(hr)))
+        )
+        
+      }
+      
+      mn <- sprintf(
+        '%02d', 
+        as.numeric(
+          stringr::str_extract(
+            tz, 
+            '[:digit:]*$'
+          )
+        )
+      )
+      
+      output <- paste0(hr, ':', mn)
+      
+    } else if (stringr::str_count(tz, ':') > 1){
+      
+      stop('Input argument "tz" cannot have a finer temporal resolution than hh:mm')
+      
+    } else {
+      
+      hr <- as.numeric(tz)
+      
+      if (hr > 0){
+        
+        output <- paste0(
+          '+', 
+          sprintf('%02d', abs(as.numeric(hr)))
+        )
+        
+      } else if (hr < 0){
+        
+        output <- paste0(
+          '-', 
+          sprintf('%02d', abs(as.numeric(hr)))
+        )
+        
+      } else if (hr == 0){
+        
+        output <- sprintf('%02d', abs(as.numeric(hr)))
+        
+        stop(paste0('tz = ', tz, ' is not a valid time zone offset.'))
+        
+      }
+      
+    }
+
+    if (sum(stringr::str_detect(onames$offset, paste0('\\', output))) == 0){
+
+      stop(paste0('tz = ', output, ' is not a valid time zone offset.'))
+
+    }
+    
+  }
+
+  # Return value
+  
+  output
+
+}
+
+
