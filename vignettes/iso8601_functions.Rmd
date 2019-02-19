@@ -53,7 +53,8 @@ Looks like the orders didn't fully describe the input data. NAs are returned whe
 
 x[is.na(x_cnv)]
 
-# There are two additional orders present in these data, 'mdy H' and 'dmy HM'. Try converting with an updated list of orders.
+# There are two additional orders present in these data, 'mdy H' and 'dmy HM'.
+# Try converting with an updated list of orders.
 
 x_cnv <- iso8601_convert(x, orders = c('mdy H', 'mdy HM', 'dmy HM'))
 x_cnv
@@ -62,7 +63,7 @@ x_cnv
 All the input data have been converted to ISO 8601 and the output contains multiple temporal resolutions (as indicated by the warning message). If we want to output a consistent resolution, we can use the `return.format` argument to see where the output resolution differs, and make the appropriate changes to `iso8601_convert`.
 
 ```{r report formats, echo=TRUE, paged.print=TRUE}
-# Return a data frame containing x, x_converted, and the format of x_converted. 
+# Return a data frame containing x, x_converted, and the format of x_converted.
 
 x_cnv <- iso8601_convert(x, orders = c('mdy H', 'mdy HM', 'dmy HM'), return.format = TRUE)
 x_cnv
@@ -76,7 +77,9 @@ frmts
 
 x_cnv$x[x_cnv$format == frmts[2]]
 
-# To output data in the same temporal resolution change 'mdy H' to 'mdy HM' and set `truncated` to the number of format characters missing in the original data (i.e. 1).
+# To output data in the same temporal resolution change 'mdy H' to 'mdy HM' 
+# and set `truncated` to the number of format characters missing in the 
+# original data (i.e. 1).
 
 x_cnv <- iso8601_convert(x, orders = c('mdy HM', 'mdy HM', 'dmy HM'), truncated = 1)
 x_cnv
@@ -107,9 +110,15 @@ Another common data management task is to identify and report the format string 
 
 iso8601_get_format_string(x_cnv)
 
-# If there were more than one date time formats present, then the mode is returned with a warning message.
+# If there were more than one date time formats present, then the mode is 
+# returned with a warning message.
 
-x_different_formats <- c('2012-05-15T13:45:00', '2012-06-15T13:45:00', '2012-07-15T13:45:00', '2012-08-15T13:45', '2012-09-15T13:45', '2012-10-15T13')
+x_different_formats <- c('2012-05-15T13:45:00', 
+                         '2012-06-15T13:45:00', 
+                         '2012-07-15T13:45:00', 
+                         '2012-08-15T13:45', 
+                         '2012-09-15T13:45', 
+                         '2012-10-15T13')
 
 iso8601_get_format_string(x_different_formats)
 
@@ -121,7 +130,7 @@ iso8601_get_format_string(x_different_formats, return.format = TRUE)
 
 ## Reading into POSIXct POSIXt
 
-`iso8601_read` provides a lightweight option for reading ISO 8601 data created with `iso8601_convert` into POSIXct POXIXt. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to `lubridate::parse_date_time`.
+`iso8601_read` provides a lightweight option for reading ISO 8601 data created with `iso8601_convert` into POSIXct POSIXt. This function uses regular expressions to extract the orders and time zone offset arguments and then passess the info to `lubridate::parse_date_time`.
 
 ```{r read, echo=TRUE, paged.print=TRUE}
 # Read data into POSIXct POSIXt
