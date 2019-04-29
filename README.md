@@ -1,5 +1,6 @@
 [![Travis-CI Build Status](https://travis-ci.com/EDIorg/dataCleanr.svg?branch=master)](https://travis-ci.org/EDIorg/dataCleanr)
 [![codecov.io](https://codecov.io/github/EDIorg/dataCleanr/coverage.svg?branch=master)](https://codecov.io/github/EDIorg/dataCleanr?branch=master)
+[![DOI](https://zenodo.org/badge/156594363.svg)](https://zenodo.org/badge/latestdoi/156594363)
 
 # dataCleanr
 
