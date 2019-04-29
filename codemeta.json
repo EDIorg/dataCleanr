@@ -11,7 +11,7 @@
   "relatedLink": "https://ediorg.github.io/dataCleanr/",
   "issueTracker": "https://github.com/EDIorg/dataCleanr/issues",
   "license": "GPL 2.0",
-  "version": "0.0.0.9000",
+  "version": "1.0.0",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -106,8 +106,8 @@
       "sameAs": "https://CRAN.R-project.org/package=lubridate"
     }
   ],
-  "readme": "https://github.com/clnsmth/dataCleanr/blob/master/README.md",
-  "fileSize": "63.015KB",
+  "readme": "https://github.com/EDIorg/dataCleanr/blob/master/README.md",
+  "fileSize": "70.128KB",
   "contIntegration": [
     "https://travis-ci.org/EDIorg/dataCleanr",
     "https://codecov.io/github/EDIorg/dataCleanr?branch=master"

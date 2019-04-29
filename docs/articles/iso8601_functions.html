@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataCleanr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -80,7 +80,7 @@
       <h1>Using the iso8601 functions</h1>
                         <h4 class="author">Colin Smith</h4>
             
-            <h4 class="date">2019-02-19</h4>
+            <h4 class="date">2019-04-29</h4>
       
       <small class="dont-index">Source: <a href="https://github.com/EDIorg/dataCleanr/blob/master/vignettes/iso8601_functions.Rmd"><code>vignettes/iso8601_functions.Rmd</code></a></small>
       <div class="hidden name"><code>iso8601_functions.Rmd</code></div>
@@ -92,7 +92,7 @@
 <p>Data interoperability is improved by the adoption of standard date and time formats. To facilitate use of the ISO 8601 standard, we’ve developed functions for converting to ISO 8601 formats, for reporting ISO 8601 format specifiers, and for reading ISO 8601 strings into POSIXct and POSIXt. This vignette provides an overview of these functions and demonstrates their capabilities.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Install and load dataCleanr</span>
 
-<span class="co"># devtools::install_github('EDIorg/dataCleanr')</span>
+<span class="co"># remotes::install_github('EDIorg/dataCleanr')</span>
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(dataCleanr)</code></pre></div>
 <div id="conversion" class="section level2">
 <h2 class="hasAnchor">
@@ -288,11 +288,11 @@ x_different_formats &lt;-<span class="st"> </span><span class="kw"><a href="http
 <span class="co"># Read data into R</span>
 x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso8601_read.html">iso8601_read</a></span>(x_cnv)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/attributes">attributes</a></span>(x_pos)
-<span class="co">#&gt; $tzone</span>
-<span class="co">#&gt; [1] "Etc/GMT+5"</span>
-<span class="co">#&gt; </span>
 <span class="co">#&gt; $class</span>
-<span class="co">#&gt; [1] "POSIXct" "POSIXt"</span></code></pre></div>
+<span class="co">#&gt; [1] "POSIXct" "POSIXt" </span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; $tzone</span>
+<span class="co">#&gt; [1] "Etc/GMT+5"</span></code></pre></div>
 <p>Now that the data are in POSIX, the myriad of date and time functions of <code>lubridate</code> are available to you.</p>
 </div>
   </div>
@@ -317,7 +317,7 @@ x_pos &lt;-<span class="st"> </span><span class="kw"><a href="../reference/iso86
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>

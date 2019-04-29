@@ -21,7 +21,7 @@ Data interoperability is improved by the adoption of standard date and time form
 ```{r instload dataCleanr, message=FALSE, warning=FALSE}
 # Install and load dataCleanr
 
-# devtools::install_github('EDIorg/dataCleanr')
+# remotes::install_github('EDIorg/dataCleanr')
 library(dataCleanr)
 
 ```

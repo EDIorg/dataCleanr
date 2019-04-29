@@ -9,7 +9,7 @@
 
 ```
 # Install from GitHub
-devtools::install_github("EDIorg/dataCleanr")
+remotes::install_github("EDIorg/dataCleanr")
 ```
 
 ## Usage
