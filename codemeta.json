@@ -107,7 +107,7 @@
     }
   ],
   "readme": "https://github.com/EDIorg/dataCleanr/blob/master/README.md",
-  "fileSize": "70.128KB",
+  "fileSize": "70.418KB",
   "contIntegration": [
     "https://travis-ci.org/EDIorg/dataCleanr",
     "https://codecov.io/github/EDIorg/dataCleanr?branch=master"
