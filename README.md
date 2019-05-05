@@ -17,7 +17,7 @@ remotes::install_github("EDIorg/dataCleanr")
 
 ## Usage
 
-Check out available functions and use cases at the [dataCleanr website.](https://EDIorg.github.io/dataCleanr/)
+[Check out example use cases in the dataCleanr website articles](https://EDIorg.github.io/dataCleanr/)
 
 ## Roadmap
 
