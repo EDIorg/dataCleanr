@@ -394,7 +394,7 @@ iso8601_convert <- function(x, orders, tz = NULL, truncated = 0, exact = FALSE,
       )
     )
     
-    if (stringr::str_detect(orders[use_i], '(OS|%OS)$')){
+    if (any(stringr::str_detect(orders[use_i], '(OS|%OS)$'))){
       
       decsec <- as.character(
         max(
