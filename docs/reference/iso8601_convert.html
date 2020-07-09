@@ -8,21 +8,29 @@
 
 <title>Convert dates and times to ISO 8601 — iso8601_convert • dataCleanr</title>
 
+
 <!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
 
-<!-- sticky kit -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +38,8 @@
 
 
 
-<meta property="og:title" content="Convert dates and times to ISO 8601 — iso8601_convert" />
 
+<meta property="og:title" content="Convert dates and times to ISO 8601 — iso8601_convert" />
 <meta property="og:description" content="Convert date and time strings into standard ISO 8601 formatted strings,
    with output temporal resolution matching inputs, and full support of 
    timezone offsets.   
@@ -39,7 +47,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
    supported formats include calendar dates, times, time zones, and valid
    combinations of these. Week dates, ordinal dates, and time intervals are 
    not yet supported." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -53,9 +61,10 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +78,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">dataCleanr</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.1</span>
       </span>
     </div>
 
@@ -77,7 +86,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -97,11 +106,10 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
   </ul>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
         <li>
-  <a href="https://github.com/EDIorg/dataCleanr">
-    <span class="fa fa-github fa-lg"></span>
+  <a href="https://github.com/EDIorg/dataCleanr/">
+    <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
 </li>
@@ -112,6 +120,7 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
@@ -123,7 +132,6 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
     </div>
 
     <div class="ref-description">
-    
     <p>Convert date and time strings into standard ISO 8601 formatted strings,
    with output temporal resolution matching inputs, and full support of 
    timezone offsets.</p>   
@@ -131,12 +139,11 @@ NOTE: This function does not convert to all ISO 8601 formats. Currently
    supported formats include calendar dates, times, time zones, and valid
    combinations of these. Week dates, ordinal dates, and time intervals are 
    not yet supported.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>iso8601_convert</span>(<span class='no'>x</span>, <span class='no'>orders</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>0</span>, <span class='kw'>exact</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
     <span class='kw'>train</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>drop</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return.format</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -230,7 +237,7 @@ This argument supports identification of where differences in output
 temporal resolution occur.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>(character) A vector of dates and times in the ISO 8601 standard in the 
@@ -241,7 +248,6 @@ temporal resolution occur.</p></td>
     containing the input data, converted data, and formats of the converted 
     data. This supports identification of where differences in output 
     temporal resolution occur.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>`iso8601_convert` leverages the power of `lubridate::parse_date_time` to 
@@ -250,37 +256,27 @@ temporal resolution occur.</p></td>
    outputs the converted data in this same resolution. Most of the arguments
    available to `lubridate::parse_date_time` can be used with 
    `iso8601_convert`.</p>
-    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>   <span class='co'># Convert dates and times of varying temporal resolution</span>
    <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'y'</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: Some data failed to parse. Consider updating your list of orders.</span></div><div class='output co'>#&gt; [1] NA</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'01/05/2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'dmy'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'01-May-2012'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'dby'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'HMS'</span>)</div><div class='output co'>#&gt; [1] "13:29:54"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'HMS'</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>'-05'</span>)</div><div class='output co'>#&gt; [1] "13:29:54-05"</div><div class='input'>   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'20120501 132954'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'Ymd HMS'</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>'-05'</span>)</div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54-05"</div><div class='input'>
    <span class='co'># Some variation of input format is supported as long as orders are defined.</span>
    <span class='co'># NOTE: Output resolution matches input resolution.</span>
-   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HM'</span>, <span class='st'>'dmy_H'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Converted data contains multiple levels of temporal resolution. Use the argument "return.format = T" to see where.</span></div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2012-05-01T13:29"    "2012-05-01T13"      </div><div class='input'>
+   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HM'</span>, <span class='st'>'dmy_H'</span>))</div><div class='output co'>#&gt; <span class='warning'>Warning: Converted data contains multiple levels of temporal resolution. Use the argument "return.format = T" to see where.</span></div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2012-05-01T13:29"    "2012-05-01T13"      </div><div class='input'>
    <span class='co'># Force output resolution to be the same</span>
-   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HMS'</span>, <span class='st'>'dmy_HMS'</span>), <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; <span class='warning'>Warning: the condition has length &gt; 1 and only the first element will be used</span></div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2005-12-20T01:13:29" "2012-05-01T13:00:00"</div><div class='input'>   
-   </div><span class='co'># NOT RUN {</span>
+   <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'2012-05-01 13:29:54'</span>, <span class='st'>'2012-05-01 13:29'</span>, <span class='st'>'1/5/2012 13'</span>), <span class='kw'>orders</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>'ymd_HMS'</span>, <span class='st'>'ymd_HMS'</span>, <span class='st'>'dmy_HMS'</span>), <span class='kw'>truncated</span> <span class='kw'>=</span> <span class='fl'>3</span>)</div><div class='output co'>#&gt; [1] "2012-05-01T13:29:54" "2005-12-20T01:13:29" "2012-05-01T13:00:00"</div><div class='input'>
+   <span class='kw'>if</span> (<span class='fl'>FALSE</span>) {
    <span class='co'># Invalid time zones result in an error</span>
    <span class='fu'>iso8601_convert</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='st'>'2012-05-01 13:29'</span>, <span class='kw'>orders</span> <span class='kw'>=</span> <span class='st'>'ymd HM'</span>, <span class='kw'>tz</span> <span class='kw'>=</span> <span class='st'>'+18'</span>)
-
-<span class='co'># }</span><div class='input'>
-</div></pre>
+   }</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
@@ -288,13 +284,16 @@ temporal resolution occur.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
   
 
+
   </body>
 </html>
+
 

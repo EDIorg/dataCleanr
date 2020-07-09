@@ -10,15 +10,15 @@
   "codeRepository": "https://github.com/EDIorg/dataCleanr",
   "relatedLink": "https://ediorg.github.io/dataCleanr/",
   "issueTracker": "https://github.com/EDIorg/dataCleanr/issues",
-  "license": "GPL 2.0",
-  "version": "1.0.0",
+  "license": "https://spdx.org/licenses/GPL-2.0",
+  "version": "1.0.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 3.6.3 (2020-02-29)",
   "author": [
     {
       "@type": "Person",
@@ -107,7 +107,7 @@
     }
   ],
   "readme": "https://github.com/EDIorg/dataCleanr/blob/master/README.md",
-  "fileSize": "70.418KB",
+  "fileSize": "76.317KB",
   "contIntegration": [
     "https://travis-ci.org/EDIorg/dataCleanr",
     "https://codecov.io/github/EDIorg/dataCleanr?branch=master"
